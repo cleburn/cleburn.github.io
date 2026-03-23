@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aegis - End-to-End Governance for AI Agents</title>
+  <title>Aegis — End-to-End Governance for AI Agents</title>
   <meta name="description" content="The only end-to-end governance framework for AI agents. The spec defines the law. The CLI generates it. The MCP enforces it at runtime.">
-  <meta property="og:title" content="Aegis - End-to-End Governance for AI Agents">
+  <meta property="og:title" content="Aegis — End-to-End Governance for AI Agents">
   <meta property="og:description" content="The spec defines the law. The CLI generates it. The MCP enforces it at runtime. Open source.">
   <meta property="og:type" content="website">
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/cleburn/aegis-mcp/main/aegis-icon-128.png">
@@ -28,7 +28,11 @@
       --accent-green: #4ade80;
       --accent-green-dim: rgba(74, 222, 128, 0.12);
       --accent-gold: #f0c040;
+      --accent-gold-dim: rgba(240, 192, 64, 0.12);
       --accent-red: #f87171;
+      --accent-red-dim: rgba(248, 113, 113, 0.12);
+      --accent-purple: #a78bfa;
+      --accent-purple-dim: rgba(167, 139, 250, 0.12);
       --font-display: 'Outfit', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -47,7 +51,7 @@
       overflow-x: hidden;
     }
 
-    /* ---- Noise overlay ---- */
+    /* Noise overlay */
     body::before {
       content: '';
       position: fixed;
@@ -90,10 +94,7 @@
       color: var(--text-primary);
     }
 
-    .nav-logo svg {
-      width: 28px;
-      height: 28px;
-    }
+    .nav-logo svg { width: 28px; height: 28px; }
 
     .nav-logo span {
       font-family: var(--font-mono);
@@ -131,6 +132,31 @@
 
     .nav-cta:hover { opacity: 0.85; }
 
+    /* ---- Shared ---- */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-blue);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-subtitle {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
     /* ---- Hero ---- */
     .hero {
       padding: 160px 0 100px;
@@ -150,6 +176,15 @@
       pointer-events: none;
     }
 
+    .hero-badges {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
     .hero-badge {
       display: inline-flex;
       align-items: center;
@@ -160,9 +195,12 @@
       font-size: 13px;
       color: var(--accent-blue);
       font-family: var(--font-mono);
-      margin-bottom: 32px;
       background: var(--bg-card);
+      text-decoration: none;
+      transition: border-color 0.2s;
     }
+
+    .hero-badge:hover { border-color: var(--accent-blue); }
 
     .hero-badge .dot {
       width: 6px;
@@ -178,11 +216,11 @@
     }
 
     .hero h1 {
-      font-size: clamp(40px, 6vw, 68px);
+      font-size: clamp(40px, 6vw, 64px);
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.08;
       letter-spacing: -1.5px;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
       position: relative;
     }
 
@@ -193,12 +231,21 @@
       background-clip: text;
     }
 
-    .hero p {
-      font-size: 18px;
+    .hero-lead {
+      font-size: 20px;
+      color: var(--text-primary);
+      max-width: 700px;
+      margin: 0 auto 16px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 16px;
       color: var(--text-secondary);
       max-width: 620px;
       margin: 0 auto 40px;
-      line-height: 1.8;
+      line-height: 1.7;
     }
 
     .hero-install {
@@ -222,9 +269,7 @@
       background: var(--bg-card-hover);
     }
 
-    .hero-install .prefix {
-      color: var(--accent-green);
-    }
+    .hero-install .prefix { color: var(--accent-green); }
 
     .hero-install .copy-hint {
       color: var(--text-dim);
@@ -289,29 +334,186 @@
       font-family: var(--font-mono);
     }
 
-    .section-label {
+    /* ---- .agentpolicy/ visualization ---- */
+    .policy-viz {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .policy-tree-wrapper {
+      max-width: 680px;
+      margin: 48px auto 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .policy-tree-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .policy-tree-bar .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .policy-tree-bar .dot:nth-child(1) { background: #ff5f57; }
+    .policy-tree-bar .dot:nth-child(2) { background: #febc2e; }
+    .policy-tree-bar .dot:nth-child(3) { background: #28c840; }
+
+    .policy-tree-bar .title {
+      margin-left: 8px;
+      color: var(--text-secondary);
+    }
+
+    .policy-tree {
+      padding: 28px 32px;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    .tree-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .tree-line.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .tree-indent { color: var(--text-dim); user-select: none; }
+    .tree-folder { color: var(--accent-blue); }
+    .tree-file { color: var(--text-primary); }
+    .tree-annotation {
+      color: var(--text-dim);
+      font-size: 12px;
+      margin-left: auto;
+    }
+
+    .tree-line .tree-file.constitution { color: var(--accent-blue); }
+    .tree-line .tree-file.governance { color: var(--accent-green); }
+    .tree-line .tree-file.role { color: var(--accent-gold); }
+    .tree-line .tree-file.ledger { color: var(--accent-purple); }
+
+    /* Tree toggle */
+    .tree-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 0 32px;
+      padding: 16px 0 0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .tree-toggle-btn {
+      padding: 8px 20px;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    .tree-toggle-btn:first-child {
+      border-radius: 6px 0 0 6px;
+      border-right: none;
+    }
+
+    .tree-toggle-btn:last-child {
+      border-radius: 0 6px 6px 0;
+    }
+
+    .tree-toggle-btn.active {
+      background: var(--accent-blue-glow);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .tree-toggle-btn:last-child.active {
+      border-left-color: var(--accent-blue);
+    }
+
+    .tree-toggle-btn:not(.active):hover {
+      border-color: var(--border-accent);
+      color: var(--text-secondary);
+    }
+
+    .tree-toggle-hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 8px;
+      margin-bottom: -4px;
+      font-family: var(--font-mono);
+      padding: 0 32px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .tree-toggle-hint.visible {
+      opacity: 1;
+    }
+
+    /* Tree variant containers */
+    .tree-variant {
+      display: none;
+    }
+
+    .tree-variant.active {
+      display: block;
+    }
+
+    .tree-file.compliance-role { color: var(--accent-red); }
+    .tree-file.sensitivity { color: var(--accent-purple); }
+
+    /* Preview panel */
+    .policy-preview {
+      border-top: 1px solid var(--border);
+      padding: 20px 32px;
+      text-align: left;
       font-family: var(--font-mono);
       font-size: 12px;
-      color: var(--accent-blue);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 16px;
-      letter-spacing: -0.5px;
-    }
-
-    .section-subtitle {
-      font-size: 17px;
-      color: var(--text-secondary);
-      max-width: 640px;
       line-height: 1.7;
+      color: var(--text-dim);
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
     }
+
+    .preview-content {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .preview-content.visible { opacity: 1; }
+
+    .preview-key { color: var(--accent-blue); }
+    .preview-string { color: var(--accent-green); }
+    .preview-bracket { color: var(--text-dim); }
+    .preview-comment { color: var(--text-dim); font-style: italic; }
 
     /* ---- Three Layers ---- */
     .layers {
@@ -404,7 +606,6 @@
 
     .layer-card a:hover { gap: 10px; }
 
-    /* ---- Flow Connector ---- */
     .flow-connector {
       display: flex;
       justify-content: center;
@@ -416,10 +617,7 @@
       color: var(--text-dim);
     }
 
-    .flow-connector .arrow {
-      color: var(--accent-blue);
-      font-size: 18px;
-    }
+    .flow-connector .arrow { color: var(--accent-blue); font-size: 18px; }
 
     .flow-connector .step {
       padding: 6px 16px;
@@ -428,80 +626,7 @@
       background: var(--bg-card);
     }
 
-    /* ---- Proof ---- */
-    .proof {
-      padding: 100px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .proof-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 48px;
-    }
-
-    .proof-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 36px;
-      transition: border-color 0.3s;
-    }
-
-    .proof-card:hover { border-color: var(--border-accent); }
-
-    .proof-card .industry {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .proof-card:nth-child(1) .industry { color: var(--accent-blue); }
-    .proof-card:nth-child(2) .industry { color: var(--accent-green); }
-
-    .proof-card h3 {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .proof-card p {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    .proof-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .proof-stat {
-      background: var(--bg-surface);
-      border-radius: 8px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .proof-stat .val {
-      font-family: var(--font-mono);
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .proof-stat .desc {
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-top: 2px;
-    }
-
-    /* ---- Screenshot ---- */
+    /* ---- Enforcement Screenshot ---- */
     .screenshot {
       padding: 80px 0;
       border-top: 1px solid var(--border);
@@ -545,31 +670,241 @@
       color: var(--text-secondary);
     }
 
-    .screenshot-content .prompt {
+    .screenshot-content .prompt { color: var(--text-dim); }
+    .screenshot-content .prompt::before { content: '> '; color: var(--accent-green); }
+    .screenshot-content .response { color: var(--text-primary); margin: 8px 0 16px; }
+    .screenshot-content .blocked { color: var(--accent-red); font-weight: 600; }
+    .screenshot-content .allowed { color: var(--accent-green); }
+    .screenshot-content .policy-ref { color: var(--accent-blue); }
+
+    /* ---- Proof / Stress Tests ---- */
+    .proof {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .proof-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .proof-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .proof-card:hover { border-color: var(--border-accent); }
+
+    .proof-card-inner {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 0;
+    }
+
+    .proof-narrative {
+      padding: 40px 36px;
+    }
+
+    .proof-narrative .industry {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .proof-card:nth-child(1) .industry { color: var(--accent-blue); }
+    .proof-card:nth-child(2) .industry { color: var(--accent-green); }
+
+    .proof-narrative h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .proof-narrative p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    .proof-narrative .highlight {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .proof-narrative a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+
+    .proof-narrative a:hover { gap: 10px; }
+
+    .proof-sidebar {
+      background: var(--bg-surface);
+      padding: 36px 28px;
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .proof-metric {
+      text-align: center;
+      padding: 16px;
+      background: var(--bg-card);
+      border-radius: 8px;
+    }
+
+    .proof-metric .val {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .proof-metric .desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .proof-vs {
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    .proof-vs-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px 40px;
+      display: inline-block;
+      max-width: 800px;
+    }
+
+    .proof-vs-card .vs-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+    }
+
+    .proof-vs-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .proof-vs-col { text-align: center; }
+
+    .proof-vs-col .name {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .proof-vs-col .detail {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .proof-vs-col .big {
+      font-family: var(--font-mono);
+      font-size: 36px;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .proof-vs-grid .vs-divider {
+      font-family: var(--font-mono);
+      font-size: 14px;
       color: var(--text-dim);
     }
 
-    .screenshot-content .prompt::before {
-      content: '> ';
-      color: var(--accent-green);
+    /* ---- Build On Aegis ---- */
+    .platform {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
     }
 
-    .screenshot-content .response {
-      color: var(--text-primary);
-      margin: 8px 0 16px;
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
     }
 
-    .screenshot-content .blocked {
-      color: var(--accent-red);
+    .platform-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.3s;
+    }
+
+    .platform-card:hover { border-color: var(--border-accent); }
+
+    .platform-card .platform-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+
+    .platform-card:nth-child(1) .platform-icon { background: var(--accent-blue-glow); }
+    .platform-card:nth-child(2) .platform-icon { background: var(--accent-green-dim); }
+    .platform-card:nth-child(3) .platform-icon { background: var(--accent-gold-dim); }
+    .platform-card:nth-child(4) .platform-icon { background: var(--accent-purple-dim); }
+
+    .platform-card h4 {
+      font-size: 16px;
       font-weight: 600;
+      margin-bottom: 8px;
     }
 
-    .screenshot-content .allowed {
+    .platform-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .platform-card code {
+      display: block;
+      margin-top: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
       color: var(--accent-green);
-    }
-
-    .screenshot-content .policy-ref {
-      color: var(--accent-blue);
+      white-space: pre;
+      overflow-x: auto;
     }
 
     /* ---- Ten Minutes ---- */
@@ -752,11 +1087,24 @@
     @media (max-width: 768px) {
       .problem-grid,
       .layers-grid,
-      .proof-grid,
       .paths,
+      .platform-grid,
       .footer-grid {
         grid-template-columns: 1fr;
       }
+
+      .proof-card-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .proof-sidebar {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .proof-sidebar .proof-metric { flex: 1; min-width: 120px; }
 
       .ten-minutes .comparison {
         grid-template-columns: 1fr;
@@ -769,6 +1117,10 @@
       .hero { padding: 120px 0 60px; }
 
       .flow-connector { flex-wrap: wrap; }
+
+      .proof-vs-grid { grid-template-columns: 1fr; gap: 16px; }
+
+      .hero-badges { flex-direction: column; }
     }
 
     /* ---- Animations ---- */
@@ -800,8 +1152,9 @@
         <span>AEGIS</span>
       </a>
       <div class="nav-links">
-        <a href="#layers">How It Works</a>
+        <a href="#how">How It Works</a>
         <a href="#proof">Results</a>
+        <a href="#platform">Integrate</a>
         <a href="#start">Get Started</a>
         <a href="https://github.com/cleburn/aegis-spec" class="nav-cta">GitHub</a>
       </div>
@@ -811,12 +1164,24 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge fade-up">
-        <span class="dot"></span>
-        Listed in the MCP Registry
+      <div class="hero-badges fade-up">
+        <span class="hero-badge">
+          <span class="dot"></span>
+          Listed in the MCP Registry
+        </span>
+        <a href="https://www.npmjs.com/package/aegis-cli" class="hero-badge" target="_blank" style="color: var(--accent-green);">
+          npm: aegis-cli
+        </a>
       </div>
-      <h1 class="fade-up"><span class="gradient">End-to-end governance</span><br>for AI agents</h1>
-      <p class="fade-up">Don't chase your agents. Let Aegis build their unbreakable guardrails before they ever enter your project. The spec defines the law. The CLI generates it from a single conversation. The MCP enforces it at runtime. Open source.</p>
+      <h1 class="fade-up">
+        Your agents need a <span class="gradient">contract,</span><br>not a conversation.
+      </h1>
+      <p class="hero-lead fade-up">
+        Aegis is the governance layer that tells every AI agent exactly what it can touch, what's off-limits, and how to coordinate &mdash; before it writes a single line of code.
+      </p>
+      <p class="hero-sub fade-up">
+        The spec defines the law. The CLI generates it from one conversation. The MCP enforces it at runtime. Open source. Agent-agnostic.
+      </p>
       <div class="hero-install fade-up" onclick="copyInstall(this)">
         <span class="prefix">$</span> npm install -g aegis-cli
         <span class="copy-hint">click to copy</span>
@@ -830,7 +1195,7 @@
     <div class="container">
       <div class="section-label fade-up">The Problem</div>
       <h2 class="section-title fade-up">AI agents are writing production code<br>with zero governance.</h2>
-      <p class="section-subtitle fade-up">Because the agents don't have a contract with you. They have markdown files. Markdown files aren't contracts. System prompts aren't enforceable. Every current workaround is written for human readers, and agents just cope. Aegis is the translator that turns your vision for the project into a binding contract that the agents cannot break.</p>
+      <p class="section-subtitle fade-up">Markdown files aren't contracts. System prompts aren't enforceable. Every current workaround is written for human readers, and agents just cope. When something goes wrong, it goes wrong at production speed.</p>
       <div class="problem-grid">
         <div class="problem-stat fade-up">
           <div class="number">6.3M</div>
@@ -851,32 +1216,291 @@
     </div>
   </section>
 
+  <!-- .agentpolicy/ Visualization -->
+  <section class="policy-viz" id="how">
+    <div class="container">
+      <div class="section-label fade-up">What Gets Generated</div>
+      <h2 class="section-title fade-up">One conversation. One directory.<br>Every agent knows the rules.</h2>
+      <p class="section-subtitle fade-up" style="margin: 0 auto;">Run <code style="background:var(--bg-card);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:14px;">aegis init</code> and Aegis scans your codebase, asks sharp questions about your priorities and boundaries, and compiles your answers into schema-validated JSON that any agent can parse deterministically.</p>
+      <div class="policy-tree-wrapper fade-up" id="policyTree">
+        <div class="policy-tree-bar">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="title">.agentpolicy/</span>
+        </div>
+        <div class="tree-toggle">
+          <button class="tree-toggle-btn active" data-variant="standard" onclick="switchVariant('standard')">Standard Project</button>
+          <button class="tree-toggle-btn" data-variant="fintech" onclick="switchVariant('fintech')">Regulated (FinTech)</button>
+        </div>
+        <div class="tree-toggle-hint" id="toggleHint">Adapts to your project's complexity</div>
+
+        <!-- Standard tree -->
+        <div class="policy-tree tree-variant active" id="treeStandard" data-previews="constitution,governance,role-default,role-frontend,role-backend,role-testing,ledger">
+          <div class="tree-line" data-delay="0" data-preview="constitution">
+            <span class="tree-indent">├──</span>
+            <span class="tree-file constitution">constitution.json</span>
+            <span class="tree-annotation">project identity, stack, principles</span>
+          </div>
+          <div class="tree-line" data-delay="1" data-preview="governance">
+            <span class="tree-indent">├──</span>
+            <span class="tree-file governance">governance.json</span>
+            <span class="tree-annotation">autonomy, permissions, quality gates</span>
+          </div>
+          <div class="tree-line" data-delay="2">
+            <span class="tree-indent">├──</span>
+            <span class="tree-folder">roles/</span>
+          </div>
+          <div class="tree-line" data-delay="3" data-preview="role-default">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">default.json</span>
+            <span class="tree-annotation">catch-all for single-agent workflows</span>
+          </div>
+          <div class="tree-line" data-delay="4" data-preview="role-frontend">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">frontend.json</span>
+            <span class="tree-annotation">scoped: UI, components, client state</span>
+          </div>
+          <div class="tree-line" data-delay="5" data-preview="role-backend">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">backend.json</span>
+            <span class="tree-annotation">scoped: API, business logic, database</span>
+          </div>
+          <div class="tree-line" data-delay="6" data-preview="role-testing">
+            <span class="tree-indent">│&nbsp;&nbsp; └──</span>
+            <span class="tree-file role">testing.json</span>
+            <span class="tree-annotation">scoped: test suites, validation</span>
+          </div>
+          <div class="tree-line" data-delay="7">
+            <span class="tree-indent">└──</span>
+            <span class="tree-folder">state/</span>
+          </div>
+          <div class="tree-line" data-delay="8" data-preview="ledger">
+            <span class="tree-indent">&nbsp;&nbsp;&nbsp; └──</span>
+            <span class="tree-file ledger">ledger.json</span>
+            <span class="tree-annotation">living task state with write protocol</span>
+          </div>
+        </div>
+
+        <!-- FinTech tree -->
+        <div class="policy-tree tree-variant" id="treeFintech" data-previews="ft-constitution,ft-governance,ft-gateway,ft-payments,ft-compliance,ft-customers,ft-ledger">
+          <div class="tree-line" data-delay="0" data-preview="ft-constitution">
+            <span class="tree-indent">├──</span>
+            <span class="tree-file constitution">constitution.json</span>
+            <span class="tree-annotation">PCI-DSS + SOX + AML principles</span>
+          </div>
+          <div class="tree-line" data-delay="1" data-preview="ft-governance">
+            <span class="tree-indent">├──</span>
+            <span class="tree-file governance">governance.json</span>
+            <span class="tree-annotation">3 sensitivity tiers, domain isolation</span>
+          </div>
+          <div class="tree-line" data-delay="2">
+            <span class="tree-indent">├──</span>
+            <span class="tree-folder">roles/</span>
+            <span class="tree-annotation" style="color:var(--accent-gold);">8 roles</span>
+          </div>
+          <div class="tree-line" data-delay="3" data-preview="ft-gateway">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">gateway.json</span>
+            <span class="tree-annotation">API routing, auth, rate limiting</span>
+          </div>
+          <div class="tree-line" data-delay="4" data-preview="ft-payments">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">payments.json</span>
+            <span class="tree-annotation">transaction lifecycle, settlement</span>
+          </div>
+          <div class="tree-line" data-delay="5" data-preview="ft-compliance">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file compliance-role">compliance.json</span>
+            <span class="tree-annotation">AML monitoring, SAR filing, audit</span>
+          </div>
+          <div class="tree-line" data-delay="6" data-preview="ft-customers">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file compliance-role">customers.json</span>
+            <span class="tree-annotation">PII vault, encryption, tokenization</span>
+          </div>
+          <div class="tree-line" data-delay="7">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">onboarding.json</span>
+            <span class="tree-annotation">merchant KYC, risk assessment</span>
+          </div>
+          <div class="tree-line" data-delay="8">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">dashboard.json</span>
+            <span class="tree-annotation">merchant portal (tokenized data only)</span>
+          </div>
+          <div class="tree-line" data-delay="9">
+            <span class="tree-indent">│&nbsp;&nbsp; ├──</span>
+            <span class="tree-file role">qa.json</span>
+            <span class="tree-annotation">audit evidence, append-only reports</span>
+          </div>
+          <div class="tree-line" data-delay="10">
+            <span class="tree-indent">│&nbsp;&nbsp; └──</span>
+            <span class="tree-file role">data.json</span>
+            <span class="tree-annotation">seed data, locked to customers domain</span>
+          </div>
+          <div class="tree-line" data-delay="11">
+            <span class="tree-indent">└──</span>
+            <span class="tree-folder">state/</span>
+          </div>
+          <div class="tree-line" data-delay="12" data-preview="ft-ledger">
+            <span class="tree-indent">&nbsp;&nbsp;&nbsp; └──</span>
+            <span class="tree-file ledger">ledger.json</span>
+            <span class="tree-annotation">immutable audit trail + task state</span>
+          </div>
+        </div>
+
+        <div class="policy-preview" id="policyPreview">
+          <!-- Standard previews -->
+          <div class="preview-content" data-name="constitution" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"project_name"</span>: <span class="preview-string">"ClearHealth"</span>,
+  <span class="preview-key">"tech_stack"</span>: [<span class="preview-string">"Next.js 14"</span>, <span class="preview-string">"Express"</span>, <span class="preview-string">"PostgreSQL"</span>],
+  <span class="preview-key">"principles"</span>: [<span class="preview-string">"HIPAA compliance is non-negotiable"</span>],
+  <span class="preview-key">"build_commands"</span>: { <span class="preview-key">"test"</span>: <span class="preview-string">"npm test"</span>, <span class="preview-key">"lint"</span>: <span class="preview-string">"npm run lint"</span> }
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="governance" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"autonomy"</span>: [
+    { <span class="preview-key">"domain"</span>: <span class="preview-string">"code_modification"</span>, <span class="preview-key">"level"</span>: <span class="preview-string">"delegated"</span> },
+    { <span class="preview-key">"domain"</span>: <span class="preview-string">"infrastructure_changes"</span>, <span class="preview-key">"level"</span>: <span class="preview-string">"advisory"</span> },
+    { <span class="preview-key">"domain"</span>: <span class="preview-string">"patient_data_access"</span>, <span class="preview-key">"level"</span>: <span class="preview-string">"conservative"</span> }
+  ]
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="role-default" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"default"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"src/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"docs/**"</span>] },
+  <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"infrastructure/**"</span>, <span class="preview-string">".env*"</span>]
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="role-frontend" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"frontend"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"packages/web/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"shared/**"</span>] },
+  <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"packages/api/**"</span>, <span class="preview-string">"prisma/**"</span>]
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="role-backend" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"backend"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"packages/api/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"shared/**"</span>] },
+  <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"packages/web/**"</span>, <span class="preview-string">"infrastructure/**"</span>]
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="role-testing" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"testing"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"**/*.test.*"</span>, <span class="preview-string">"**/*.spec.*"</span>] },
+  <span class="preview-key">"quality_gates"</span>: { <span class="preview-key">"pre_commit"</span>: [<span class="preview-string">"test"</span>, <span class="preview-string">"lint"</span>, <span class="preview-string">"typecheck"</span>] }
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ledger" data-variant="standard">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"tasks"</span>: [
+    { <span class="preview-key">"id"</span>: <span class="preview-string">"TASK-001"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"complete"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"backend"</span> },
+    { <span class="preview-key">"id"</span>: <span class="preview-string">"TASK-002"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"in_progress"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"frontend"</span> }
+  ],
+  <span class="preview-key">"write_protocol"</span>: { <span class="preview-key">"sequence_check"</span>: <span class="preview-string">true</span>, <span class="preview-key">"lock_file"</span>: <span class="preview-string">true</span> }
+<span class="preview-bracket">}</span>
+          </div>
+          <!-- FinTech previews -->
+          <div class="preview-content" data-name="ft-constitution" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"project_name"</span>: <span class="preview-string">"ClearFinTech"</span>,
+  <span class="preview-key">"tech_stack"</span>: [<span class="preview-string">"TypeScript"</span>, <span class="preview-string">"Node.js 20"</span>, <span class="preview-string">"PostgreSQL"</span>, <span class="preview-string">"Redis"</span>],
+  <span class="preview-key">"principles"</span>: [
+    <span class="preview-string">"PCI-DSS: card data tokenized immediately on ingestion"</span>,
+    <span class="preview-string">"SOX: every financial operation has an immutable audit trail"</span>,
+    <span class="preview-string">"AML: SAR existence is restricted — never in logs or API responses"</span>
+  ]
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ft-governance" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"sensitivity_tiers"</span>: [
+    { <span class="preview-key">"tier"</span>: <span class="preview-string">"restricted"</span>, <span class="preview-key">"examples"</span>: <span class="preview-string">"SAR filings, FinCEN content"</span>, <span class="preview-key">"logging"</span>: <span class="preview-string">"forbidden"</span> },
+    { <span class="preview-key">"tier"</span>: <span class="preview-string">"high"</span>, <span class="preview-key">"examples"</span>: <span class="preview-string">"card numbers, SSNs, bank accounts"</span>, <span class="preview-key">"display"</span>: <span class="preview-string">"tokenized"</span> },
+    { <span class="preview-key">"tier"</span>: <span class="preview-string">"standard"</span>, <span class="preview-key">"examples"</span>: <span class="preview-string">"business names, merchant tiers"</span>, <span class="preview-key">"logging"</span>: <span class="preview-string">"permitted"</span> }
+  ]
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ft-gateway" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"gateway"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"gateway/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"shared/**"</span>] },
+  <span class="preview-key">"sensitive_data_access"</span>: <span class="preview-string">"none"</span>,
+  <span class="preview-comment">// Routes requests — never handles PII or financial data</span>
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ft-payments" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"payments"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"payments/**"</span>], <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"compliance/**"</span>, <span class="preview-string">"customers/**"</span>] },
+  <span class="preview-key">"sensitive_data_access"</span>: <span class="preview-string">"tokenized_only"</span>,
+  <span class="preview-comment">// Sees token references, never raw card numbers</span>
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ft-compliance" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"compliance"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"compliance/**"</span>], <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"payments/**"</span>, <span class="preview-string">"dashboard/**"</span>] },
+  <span class="preview-key">"sensitivity_tier"</span>: <span class="preview-string">"restricted"</span>,
+  <span class="preview-comment">// SAR/FinCEN data never leaves this domain</span>
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ft-customers" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"role_name"</span>: <span class="preview-string">"customers"</span>,
+  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"customers/**"</span>, <span class="preview-string">"data/**"</span>] },
+  <span class="preview-key">"encryption"</span>: <span class="preview-string">"AES-256-GCM"</span>,
+  <span class="preview-key">"cross_domain"</span>: <span class="preview-string">"masked_and_tokenized_only"</span>,
+  <span class="preview-comment">// Raw PII encrypted at rest, masked before crossing boundary</span>
+<span class="preview-bracket">}</span>
+          </div>
+          <div class="preview-content" data-name="ft-ledger" data-variant="fintech">
+<span class="preview-bracket">{</span>
+  <span class="preview-key">"tasks"</span>: [
+    { <span class="preview-key">"id"</span>: <span class="preview-string">"FT-001"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"complete"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"compliance"</span>, <span class="preview-key">"audit"</span>: <span class="preview-string">true</span> },
+    { <span class="preview-key">"id"</span>: <span class="preview-string">"FT-002"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"complete"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"payments"</span>, <span class="preview-key">"audit"</span>: <span class="preview-string">true</span> }
+  ],
+  <span class="preview-key">"immutable"</span>: <span class="preview-string">true</span>,
+  <span class="preview-comment">// Entries frozen after creation — Object.freeze enforced</span>
+<span class="preview-bracket">}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Three Layers -->
   <section class="layers" id="layers">
     <div class="container">
-      <div class="section-label fade-up">How It Works</div>
+      <div class="section-label fade-up">The Architecture</div>
       <h2 class="section-title fade-up">Three layers. One governance framework.</h2>
-      <p class="section-subtitle fade-up">The only system that governs AI agents from policy definition through runtime enforcement. No other solution works from the engine out.</p>
+      <p class="section-subtitle fade-up">The only system that governs AI agents from policy definition through runtime enforcement. Use the full stack, or adopt any layer independently.</p>
       <div class="layers-grid">
         <div class="layer-card fade-up">
           <div class="layer-icon">&#x1f4dc;</div>
           <h3>Aegis Spec</h3>
           <span class="layer-tag">Apache 2.0</span>
-          <p>The open governance standard. Defines scoped roles, enforced permissions, autonomy levels, sensitivity tiers, and coordination protocols as schema-validated JSON.</p>
+          <p>The open governance standard. Schema-validated JSON that defines roles, permissions, autonomy levels, sensitivity tiers, and coordination protocols. The shared contract every tool can implement.</p>
           <a href="https://github.com/cleburn/aegis-spec">View spec &rarr;</a>
         </div>
         <div class="layer-card fade-up">
           <div class="layer-icon">&#x2318;</div>
           <h3>Aegis CLI</h3>
           <span class="layer-tag">MIT</span>
-          <p>The reference implementation. Run <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;font-size:12px;">aegis init</code>, have a conversation in plain English, and generate a complete .agentpolicy/ directory.</p>
+          <p>The reference implementation. Run <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;font-size:12px;">aegis init</code>, have a conversation in plain English, and generate a complete .agentpolicy/ directory. Scans your codebase first &mdash; it already knows your stack before asking the first question.</p>
           <a href="https://github.com/cleburn/aegis-cli">View CLI &rarr;</a>
         </div>
         <div class="layer-card fade-up">
           <div class="layer-icon">&#x1f6e1;</div>
           <h3>Aegis MCP</h3>
           <span class="layer-tag">MIT</span>
-          <p>Runtime enforcement. Loads policy into server memory, validates every agent action before execution. Blocked actions get a specific reason. Zero token overhead.</p>
+          <p>Runtime enforcement. Loads policy into server memory, validates every agent action before execution. Blocked actions get a specific reason and an override protocol. Zero token overhead &mdash; agents never load governance files.</p>
           <a href="https://github.com/cleburn/aegis-mcp">View MCP &rarr;</a>
         </div>
       </div>
@@ -890,68 +1514,11 @@
     </div>
   </section>
 
-  <!-- Proof -->
-  <section class="proof" id="proof">
-    <div class="container">
-      <div class="section-label fade-up">Proven Results</div>
-      <h2 class="section-title fade-up">Stress tested in the two most<br>regulated industries.</h2>
-      <p class="section-subtitle fade-up">Same spec. Different industries. Zero code changes between them.</p>
-      <div class="proof-grid">
-        <div class="proof-card fade-up">
-          <div class="industry">Healthcare / HIPAA</div>
-          <h3>ClearHealth</h3>
-          <p>5-agent AI swarm built a HIPAA-compliant healthcare platform. The DevOps agent flagged its own infrastructure changes as requiring human approval. PII pattern scan passed on GitHub Actions.</p>
-          <div class="proof-stats">
-            <div class="proof-stat">
-              <div class="val">65+</div>
-              <div class="desc">Files built</div>
-            </div>
-            <div class="proof-stat">
-              <div class="val">27m</div>
-              <div class="desc">Build time</div>
-            </div>
-            <div class="proof-stat">
-              <div class="val">0</div>
-              <div class="desc">Violations</div>
-            </div>
-            <div class="proof-stat">
-              <div class="val">5</div>
-              <div class="desc">Agent roles</div>
-            </div>
-          </div>
-        </div>
-        <div class="proof-card fade-up">
-          <div class="industry">Fintech / PCI-DSS + SOX + AML</div>
-          <h3>ClearFinTech</h3>
-          <p>Non-technical CEO described compliance in plain English. Aegis translated that into 11 governance files across 8 roles and 3 sensitivity tiers. Claude Code built the entire platform from a single sentence.</p>
-          <div class="proof-stats">
-            <div class="proof-stat">
-              <div class="val">56+</div>
-              <div class="desc">Files built</div>
-            </div>
-            <div class="proof-stat">
-              <div class="val">109</div>
-              <div class="desc">Tests passing</div>
-            </div>
-            <div class="proof-stat">
-              <div class="val">0</div>
-              <div class="desc">Violations</div>
-            </div>
-            <div class="proof-stat">
-              <div class="val">8</div>
-              <div class="desc">Agent roles</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Screenshot -->
+  <!-- Enforcement Screenshot -->
   <section class="screenshot">
     <div class="container">
       <div class="section-label fade-up">Enforcement In Action</div>
-      <h2 class="section-title fade-up">When governance means "cannot,"<br>not "shouldn't."</h2>
+      <h2 class="section-title fade-up">When governance is law,<br>not suggestion.</h2>
       <div class="screenshot-frame fade-up">
         <div class="screenshot-bar">
           <span class="dot"></span>
@@ -967,6 +1534,131 @@
             2. Have the governance policy updated to grant the payments role access<br><br>
             Is there anything else I can help with within <span class="allowed">payments/</span> or <span class="allowed">shared/</span>?
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof -->
+  <section class="proof" id="proof">
+    <div class="container">
+      <div class="section-label fade-up">Battle Tested</div>
+      <h2 class="section-title fade-up">Stress tested in the two most<br>regulated industries.</h2>
+      <p class="section-subtitle fade-up">Same spec. Different industries. Different architectures. Zero code changes between them.</p>
+
+      <div class="proof-cards">
+        <!-- ClearHealth -->
+        <div class="proof-card fade-up">
+          <div class="proof-card-inner">
+            <div class="proof-narrative">
+              <div class="industry">Healthcare / HIPAA</div>
+              <h3>ClearHealth</h3>
+              <p>A 5-agent AI swarm built a HIPAA-compliant healthcare platform from the ground up. Multi-tenant appointment management, encrypted patient records, role-based access control, full audit trails.</p>
+              <p><span class="highlight">The DevOps agent flagged its own infrastructure changes as requiring human approval</span> &mdash; not because a human told it to, but because the governance policy set infrastructure to <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:12px;">advisory</code>. The agent internalized the rules and self-governed. PII pattern scan passed on GitHub Actions.</p>
+              <a href="https://github.com/cleburn/clearhealth">View ClearHealth repo &rarr;</a>
+            </div>
+            <div class="proof-sidebar">
+              <div class="proof-metric">
+                <div class="val">65+</div>
+                <div class="desc">Files built</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">27m</div>
+                <div class="desc">Build time</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">0</div>
+                <div class="desc">Violations</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">5</div>
+                <div class="desc">Agent roles</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ClearFinTech -->
+        <div class="proof-card fade-up">
+          <div class="proof-card-inner">
+            <div class="proof-narrative">
+              <div class="industry">Fintech / PCI-DSS + SOX + AML</div>
+              <h3>ClearFinTech</h3>
+              <p>A non-technical CEO described compliance requirements in plain English. Aegis translated that into 11 governance files across 8 roles and 3 sensitivity tiers &mdash; covering PCI-DSS, SOX, and AML simultaneously.</p>
+              <p><span class="highlight">A single agent one-shotted the entire build in 11 minutes.</span> The governance was so precise that the agent didn't need to explore, backtrack, or coordinate &mdash; it just executed. Massively reduced computation and token cost compared to multi-agent approaches. 109 tests passing, all quality gates green.</p>
+              <a href="https://github.com/cleburn/clearfintech">View ClearFinTech repo &rarr;</a>
+            </div>
+            <div class="proof-sidebar">
+              <div class="proof-metric">
+                <div class="val">11m</div>
+                <div class="desc">Build time</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">109</div>
+                <div class="desc">Tests passing</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">0</div>
+                <div class="desc">Violations</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">1</div>
+                <div class="desc">Agent</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- The Insight -->
+      <div class="proof-vs fade-up">
+        <div class="proof-vs-card">
+          <div class="vs-title">The Counterintuitive Result</div>
+          <div class="proof-vs-grid">
+            <div class="proof-vs-col">
+              <div class="name">ClearHealth</div>
+              <div class="detail">HIPAA &middot; 5 agents</div>
+              <div class="big" style="color: var(--accent-blue);">27m</div>
+            </div>
+            <div class="vs-divider">vs</div>
+            <div class="proof-vs-col">
+              <div class="name">ClearFinTech</div>
+              <div class="detail">PCI-DSS + SOX + AML &middot; 1 agent</div>
+              <div class="big" style="color: var(--accent-green);">11m</div>
+            </div>
+          </div>
+          <p style="margin-top: 20px; font-size: 15px; color: var(--text-secondary); line-height: 1.7;">Harder compliance surface. Fewer agents. Faster build. When governance is precise enough, a single agent with the right instructions outperforms a swarm figuring it out together. Multi-agent is for provable separation of duties &mdash; not performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Build On Aegis -->
+  <section class="platform" id="platform">
+    <div class="container">
+      <div class="section-label fade-up">Open Standard</div>
+      <h2 class="section-title fade-up">Build on Aegis. Don't rebuild it.</h2>
+      <p class="section-subtitle fade-up">The spec is Apache 2.0. The tooling is MIT. Any platform, agent, or orchestration layer can read <code style="background:var(--bg-card);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:14px;">.agentpolicy/</code> and benefit from a standardized governance format.</p>
+      <div class="platform-grid">
+        <div class="platform-card fade-up">
+          <div class="platform-icon">&#x1f50c;</div>
+          <h4>Agent platforms</h4>
+          <p>Ship your agent with Aegis awareness built in. Read <code style="font-size:12px;">.agentpolicy/</code> at session start and your agent automatically respects project boundaries, permissions, and conventions.</p>
+        </div>
+        <div class="platform-card fade-up">
+          <div class="platform-icon">&#x1f3d7;</div>
+          <h4>IDE extensions</h4>
+          <p>Surface governance rules inline. Show developers which files are writable, read-only, or forbidden per role. Flag violations before the agent even acts.</p>
+        </div>
+        <div class="platform-card fade-up">
+          <div class="platform-icon">&#x1f512;</div>
+          <h4>Enterprise compliance</h4>
+          <p>Define sensitivity tiers and autonomy domains that map to your regulatory requirements. HIPAA, PCI-DSS, SOX, AML &mdash; or any framework your industry demands. The spec accepts any domain string.</p>
+        </div>
+        <div class="platform-card fade-up">
+          <div class="platform-icon">&#x2699;</div>
+          <h4>CI/CD pipelines</h4>
+          <p>Validate <code style="font-size:12px;">.agentpolicy/</code> files as part of your build. Run schema checks, enforce quality gates, scan for PII patterns. The JSON format means zero parsing ambiguity.</p>
         </div>
       </div>
     </div>
@@ -1005,9 +1697,9 @@
           <code>npm install -g aegis-cli<br>cd your-project<br>aegis init</code>
         </div>
         <div class="path-card fade-up">
-          <div class="audience">Technical Lead</div>
-          <h3>Evaluate the spec</h3>
-          <p>Review the schema definitions, browse the ClearHealth and ClearFinTech examples, then try the CLI on a real codebase.</p>
+          <div class="audience">Platform Builder</div>
+          <h3>Integrate the spec</h3>
+          <p>Review the schema definitions and build <code style="font-size:12px;">.agentpolicy/</code> awareness into your agent platform, IDE extension, or orchestration layer.</p>
           <a href="https://github.com/cleburn/aegis-spec" class="path-link">Read the spec &rarr;</a>
         </div>
         <div class="path-card fade-up">
@@ -1032,7 +1724,7 @@
             </svg>
             AEGIS
           </div>
-          <p>End-to-end governance for AI agents. Open source. Built by Cleburn Walker.</p>
+          <p>End-to-end governance for AI agents. Open source. Built by <a href="https://linkedin.com/in/cleburnwalker" style="color:var(--accent-blue);text-decoration:none;">Cleburn Walker</a>.</p>
         </div>
         <div class="footer-col">
           <h4>Repos</h4>
@@ -1078,11 +1770,152 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          if (entry.target.id === 'policyTree') {
+            animateTree('standard');
+          }
         }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ---- Policy tree logic ----
+    let currentVariant = 'standard';
+    let autoCycleInterval = null;
+    let currentPreviewIndex = 0;
+    let treeHasAnimated = { standard: false, fintech: false };
+
+    function getActiveTree() {
+      return document.querySelector('.tree-variant.active');
+    }
+
+    function getPreviewNamesForVariant(variant) {
+      const tree = document.getElementById(variant === 'standard' ? 'treeStandard' : 'treeFintech');
+      return tree.dataset.previews.split(',');
+    }
+
+    function animateTree(variant) {
+      if (treeHasAnimated[variant]) return;
+      treeHasAnimated[variant] = true;
+
+      const tree = getActiveTree();
+      const lines = tree.querySelectorAll('.tree-line');
+      lines.forEach((line, i) => {
+        setTimeout(() => line.classList.add('visible'), i * 100);
+      });
+
+      // Show first preview after tree finishes
+      const names = getPreviewNamesForVariant(variant);
+      setTimeout(() => showPreview(names[0]), lines.length * 100 + 200);
+
+      // Show hint after first animation
+      setTimeout(() => {
+        document.getElementById('toggleHint').classList.add('visible');
+      }, lines.length * 100 + 600);
+    }
+
+    function showPreview(name) {
+      const allPreviews = document.querySelectorAll('.preview-content');
+      allPreviews.forEach(p => p.classList.remove('visible'));
+
+      const target = document.querySelector(`.preview-content[data-name="${name}"]`);
+      if (target) {
+        setTimeout(() => target.classList.add('visible'), 50);
+      }
+    }
+
+    function stopAutoCycle() {
+      if (autoCycleInterval) {
+        clearInterval(autoCycleInterval);
+        autoCycleInterval = null;
+      }
+    }
+
+    function startAutoCycle() {
+      stopAutoCycle();
+      const names = getPreviewNamesForVariant(currentVariant);
+      currentPreviewIndex = 0;
+      autoCycleInterval = setInterval(() => {
+        currentPreviewIndex = (currentPreviewIndex + 1) % names.length;
+        showPreview(names[currentPreviewIndex]);
+      }, 3000);
+    }
+
+    function switchVariant(variant) {
+      if (variant === currentVariant) return;
+      currentVariant = variant;
+      stopAutoCycle();
+
+      // Toggle buttons
+      document.querySelectorAll('.tree-toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.variant === variant);
+      });
+
+      // Toggle trees
+      document.querySelectorAll('.tree-variant').forEach(t => t.classList.remove('active'));
+      const targetTree = document.getElementById(variant === 'standard' ? 'treeStandard' : 'treeFintech');
+      targetTree.classList.add('active');
+
+      // Hide all previews
+      document.querySelectorAll('.preview-content').forEach(p => p.classList.remove('visible'));
+
+      // Clear any highlighted lines
+      document.querySelectorAll('.tree-line').forEach(l => {
+        l.style.background = 'none';
+        l.style.margin = '';
+        l.style.padding = '';
+      });
+
+      // Animate if first time, otherwise just show first preview
+      if (!treeHasAnimated[variant]) {
+        animateTree(variant);
+      } else {
+        const names = getPreviewNamesForVariant(variant);
+        showPreview(names[0]);
+      }
+
+      // Restart auto-cycle
+      setTimeout(() => startAutoCycle(), 1500);
+    }
+
+    // Click on tree lines to show preview
+    document.addEventListener('click', (e) => {
+      const line = e.target.closest('.tree-line[data-preview]');
+      if (!line) return;
+
+      showPreview(line.dataset.preview);
+      stopAutoCycle();
+
+      // Highlight active line within the active tree only
+      const tree = line.closest('.tree-variant');
+      tree.querySelectorAll('.tree-line').forEach(l => {
+        l.style.background = 'none';
+        l.style.margin = '';
+        l.style.padding = '';
+      });
+      line.style.background = 'rgba(74, 144, 226, 0.06)';
+      line.style.borderRadius = '4px';
+      line.style.margin = '0 -8px';
+      line.style.padding = '0 8px';
+    });
+
+    // Set cursor on clickable lines
+    document.querySelectorAll('.tree-line[data-preview]').forEach(l => l.style.cursor = 'pointer');
+
+    // Pause auto-cycle on hover, resume on leave
+    const treeWrapper = document.getElementById('policyTree');
+    treeWrapper.addEventListener('mouseenter', stopAutoCycle);
+    treeWrapper.addEventListener('mouseleave', () => {
+      if (treeHasAnimated[currentVariant]) startAutoCycle();
+    });
+
+    // Start auto-cycle when tree scrolls into view
+    const treeObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && treeHasAnimated.standard) {
+        setTimeout(() => startAutoCycle(), 2000);
+      }
+    }, { threshold: 0.1 });
+    treeObserver.observe(treeWrapper);
   </script>
 
 </body>
