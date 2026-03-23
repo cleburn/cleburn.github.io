@@ -496,24 +496,44 @@
       text-align: left;
       font-family: var(--font-mono);
       font-size: 12px;
-      line-height: 1.7;
+      line-height: 1.8;
       color: var(--text-dim);
-      min-height: 120px;
       position: relative;
       overflow: hidden;
     }
 
-    .preview-content {
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    .preview-filename {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      opacity: 0.6;
     }
 
-    .preview-content.visible { opacity: 1; }
+    .preview-line {
+      white-space: pre-wrap;
+      min-height: 1.8em;
+    }
 
     .preview-key { color: var(--accent-blue); }
     .preview-string { color: var(--accent-green); }
     .preview-bracket { color: var(--text-dim); }
     .preview-comment { color: var(--text-dim); font-style: italic; }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      background: var(--accent-blue);
+      margin-left: 1px;
+      vertical-align: text-bottom;
+      animation: blink 0.8s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
 
     /* ---- Three Layers ---- */
     .layers {
@@ -1351,125 +1371,9 @@
         </div>
 
         <div class="policy-preview" id="policyPreview">
-          <!-- Standard previews -->
-          <div class="preview-content" data-name="constitution" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"project_name"</span>: <span class="preview-string">"ClearHealth"</span>,
-  <span class="preview-key">"tech_stack"</span>: [<span class="preview-string">"Next.js 14"</span>, <span class="preview-string">"Express"</span>, <span class="preview-string">"PostgreSQL"</span>],
-  <span class="preview-key">"principles"</span>: [<span class="preview-string">"HIPAA compliance is non-negotiable"</span>],
-  <span class="preview-key">"build_commands"</span>: { <span class="preview-key">"test"</span>: <span class="preview-string">"npm test"</span>, <span class="preview-key">"lint"</span>: <span class="preview-string">"npm run lint"</span> }
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="governance" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"autonomy"</span>: [
-    { <span class="preview-key">"domain"</span>: <span class="preview-string">"code_modification"</span>, <span class="preview-key">"level"</span>: <span class="preview-string">"delegated"</span> },
-    { <span class="preview-key">"domain"</span>: <span class="preview-string">"infrastructure_changes"</span>, <span class="preview-key">"level"</span>: <span class="preview-string">"advisory"</span> },
-    { <span class="preview-key">"domain"</span>: <span class="preview-string">"patient_data_access"</span>, <span class="preview-key">"level"</span>: <span class="preview-string">"conservative"</span> }
-  ]
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="role-default" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"default"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"src/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"docs/**"</span>] },
-  <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"infrastructure/**"</span>, <span class="preview-string">".env*"</span>]
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="role-frontend" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"frontend"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"packages/web/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"shared/**"</span>] },
-  <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"packages/api/**"</span>, <span class="preview-string">"prisma/**"</span>]
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="role-backend" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"backend"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"packages/api/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"shared/**"</span>] },
-  <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"packages/web/**"</span>, <span class="preview-string">"infrastructure/**"</span>]
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="role-testing" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"testing"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"**/*.test.*"</span>, <span class="preview-string">"**/*.spec.*"</span>] },
-  <span class="preview-key">"quality_gates"</span>: { <span class="preview-key">"pre_commit"</span>: [<span class="preview-string">"test"</span>, <span class="preview-string">"lint"</span>, <span class="preview-string">"typecheck"</span>] }
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ledger" data-variant="standard">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"tasks"</span>: [
-    { <span class="preview-key">"id"</span>: <span class="preview-string">"TASK-001"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"complete"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"backend"</span> },
-    { <span class="preview-key">"id"</span>: <span class="preview-string">"TASK-002"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"in_progress"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"frontend"</span> }
-  ],
-  <span class="preview-key">"write_protocol"</span>: { <span class="preview-key">"sequence_check"</span>: <span class="preview-string">true</span>, <span class="preview-key">"lock_file"</span>: <span class="preview-string">true</span> }
-<span class="preview-bracket">}</span>
-          </div>
-          <!-- FinTech previews -->
-          <div class="preview-content" data-name="ft-constitution" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"project_name"</span>: <span class="preview-string">"ClearFinTech"</span>,
-  <span class="preview-key">"tech_stack"</span>: [<span class="preview-string">"TypeScript"</span>, <span class="preview-string">"Node.js 20"</span>, <span class="preview-string">"PostgreSQL"</span>, <span class="preview-string">"Redis"</span>],
-  <span class="preview-key">"principles"</span>: [
-    <span class="preview-string">"PCI-DSS: card data tokenized immediately on ingestion"</span>,
-    <span class="preview-string">"SOX: every financial operation has an immutable audit trail"</span>,
-    <span class="preview-string">"AML: SAR existence is restricted — never in logs or API responses"</span>
-  ]
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ft-governance" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"sensitivity_tiers"</span>: [
-    { <span class="preview-key">"tier"</span>: <span class="preview-string">"restricted"</span>, <span class="preview-key">"examples"</span>: <span class="preview-string">"SAR filings, FinCEN content"</span>, <span class="preview-key">"logging"</span>: <span class="preview-string">"forbidden"</span> },
-    { <span class="preview-key">"tier"</span>: <span class="preview-string">"high"</span>, <span class="preview-key">"examples"</span>: <span class="preview-string">"card numbers, SSNs, bank accounts"</span>, <span class="preview-key">"display"</span>: <span class="preview-string">"tokenized"</span> },
-    { <span class="preview-key">"tier"</span>: <span class="preview-string">"standard"</span>, <span class="preview-key">"examples"</span>: <span class="preview-string">"business names, merchant tiers"</span>, <span class="preview-key">"logging"</span>: <span class="preview-string">"permitted"</span> }
-  ]
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ft-gateway" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"gateway"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"gateway/**"</span>], <span class="preview-key">"read_only"</span>: [<span class="preview-string">"shared/**"</span>] },
-  <span class="preview-key">"sensitive_data_access"</span>: <span class="preview-string">"none"</span>,
-  <span class="preview-comment">// Routes requests — never handles PII or financial data</span>
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ft-payments" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"payments"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"payments/**"</span>], <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"compliance/**"</span>, <span class="preview-string">"customers/**"</span>] },
-  <span class="preview-key">"sensitive_data_access"</span>: <span class="preview-string">"tokenized_only"</span>,
-  <span class="preview-comment">// Sees token references, never raw card numbers</span>
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ft-compliance" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"compliance"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"compliance/**"</span>], <span class="preview-key">"forbidden"</span>: [<span class="preview-string">"payments/**"</span>, <span class="preview-string">"dashboard/**"</span>] },
-  <span class="preview-key">"sensitivity_tier"</span>: <span class="preview-string">"restricted"</span>,
-  <span class="preview-comment">// SAR/FinCEN data never leaves this domain</span>
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ft-customers" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"role_name"</span>: <span class="preview-string">"customers"</span>,
-  <span class="preview-key">"scope"</span>: { <span class="preview-key">"writable"</span>: [<span class="preview-string">"customers/**"</span>, <span class="preview-string">"data/**"</span>] },
-  <span class="preview-key">"encryption"</span>: <span class="preview-string">"AES-256-GCM"</span>,
-  <span class="preview-key">"cross_domain"</span>: <span class="preview-string">"masked_and_tokenized_only"</span>,
-  <span class="preview-comment">// Raw PII encrypted at rest, masked before crossing boundary</span>
-<span class="preview-bracket">}</span>
-          </div>
-          <div class="preview-content" data-name="ft-ledger" data-variant="fintech">
-<span class="preview-bracket">{</span>
-  <span class="preview-key">"tasks"</span>: [
-    { <span class="preview-key">"id"</span>: <span class="preview-string">"FT-001"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"complete"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"compliance"</span>, <span class="preview-key">"audit"</span>: <span class="preview-string">true</span> },
-    { <span class="preview-key">"id"</span>: <span class="preview-string">"FT-002"</span>, <span class="preview-key">"status"</span>: <span class="preview-string">"complete"</span>, <span class="preview-key">"agent"</span>: <span class="preview-string">"payments"</span>, <span class="preview-key">"audit"</span>: <span class="preview-string">true</span> }
-  ],
-  <span class="preview-key">"immutable"</span>: <span class="preview-string">true</span>,
-  <span class="preview-comment">// Entries frozen after creation — Object.freeze enforced</span>
-<span class="preview-bracket">}</span>
-          </div>
+          <div class="preview-filename" id="previewFilename"></div>
+          <div id="previewBody"></div>
+          <span class="typing-cursor" id="typingCursor"></span>
         </div>
       </div>
     </div>
@@ -1751,85 +1655,176 @@
     </div>
   </footer>
 
+
   <script>
-    // Copy install command
+    // ---- Preview data (shorthand: <k> = key color, <v> = value color) ----
+    const previewData = {
+      standard: {
+        constitution: { file: 'constitution.json', lines: [
+          '{', '  <k>"project_name"</k>: <v>"ClearHealth"</v>,',
+          '  <k>"tech_stack"</k>: [<v>"Next.js 14"</v>, <v>"Express"</v>, <v>"PostgreSQL"</v>],',
+          '  <k>"principles"</k>: [<v>"HIPAA compliance is non-negotiable"</v>],',
+          '  <k>"build_commands"</k>: { <k>"test"</k>: <v>"npm test"</v>, <k>"lint"</k>: <v>"npm run lint"</v> }', '}' ]},
+        governance: { file: 'governance.json', lines: [
+          '{', '  <k>"autonomy"</k>: [',
+          '    { <k>"domain"</k>: <v>"code_modification"</v>, <k>"level"</k>: <v>"delegated"</v> },',
+          '    { <k>"domain"</k>: <v>"infrastructure_changes"</v>, <k>"level"</k>: <v>"advisory"</v> },',
+          '    { <k>"domain"</k>: <v>"patient_data_access"</v>, <k>"level"</k>: <v>"conservative"</v> }',
+          '  ]', '}' ]},
+        'role-default': { file: 'roles/default.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"default"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"src/**"</v>], <k>"read_only"</k>: [<v>"docs/**"</v>] },',
+          '  <k>"forbidden"</k>: [<v>"infrastructure/**"</v>, <v>".env*"</v>]', '}' ]},
+        'role-frontend': { file: 'roles/frontend.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"frontend"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"packages/web/**"</v>], <k>"read_only"</k>: [<v>"shared/**"</v>] },',
+          '  <k>"forbidden"</k>: [<v>"packages/api/**"</v>, <v>"prisma/**"</v>]', '}' ]},
+        'role-backend': { file: 'roles/backend.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"backend"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"packages/api/**"</v>], <k>"read_only"</k>: [<v>"shared/**"</v>] },',
+          '  <k>"forbidden"</k>: [<v>"packages/web/**"</v>, <v>"infrastructure/**"</v>]', '}' ]},
+        'role-testing': { file: 'roles/testing.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"testing"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"**/*.test.*"</v>, <v>"**/*.spec.*"</v>] },',
+          '  <k>"quality_gates"</k>: { <k>"pre_commit"</k>: [<v>"test"</v>, <v>"lint"</v>, <v>"typecheck"</v>] }', '}' ]},
+        ledger: { file: 'state/ledger.json', lines: [
+          '{', '  <k>"tasks"</k>: [',
+          '    { <k>"id"</k>: <v>"TASK-001"</v>, <k>"status"</k>: <v>"complete"</v>, <k>"agent"</k>: <v>"backend"</v> },',
+          '    { <k>"id"</k>: <v>"TASK-002"</v>, <k>"status"</k>: <v>"in_progress"</v>, <k>"agent"</k>: <v>"frontend"</v> }',
+          '  ],', '  <k>"write_protocol"</k>: { <k>"sequence_check"</k>: <v>true</v>, <k>"lock_file"</k>: <v>true</v> }', '}' ]}
+      },
+      fintech: {
+        'ft-constitution': { file: 'constitution.json', lines: [
+          '{', '  <k>"project_name"</k>: <v>"ClearFinTech"</v>,',
+          '  <k>"tech_stack"</k>: [<v>"TypeScript"</v>, <v>"Node.js 20"</v>, <v>"PostgreSQL"</v>, <v>"Redis"</v>],',
+          '  <k>"principles"</k>: [',
+          '    <v>"PCI-DSS: card data tokenized on ingestion"</v>,',
+          '    <v>"SOX: immutable audit trail on every operation"</v>,',
+          '    <v>"AML: SAR existence never in logs or responses"</v>', '  ]', '}' ]},
+        'ft-governance': { file: 'governance.json', lines: [
+          '{', '  <k>"sensitivity_tiers"</k>: [',
+          '    { <k>"tier"</k>: <v>"restricted"</v>, <k>"logging"</k>: <v>"forbidden"</v> },',
+          '    { <k>"tier"</k>: <v>"high"</v>, <k>"display"</k>: <v>"tokenized_only"</v> },',
+          '    { <k>"tier"</k>: <v>"standard"</v>, <k>"logging"</k>: <v>"permitted"</v> }',
+          '  ]', '}' ]},
+        'ft-gateway': { file: 'roles/gateway.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"gateway"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"gateway/**"</v>] },',
+          '  <k>"sensitive_data_access"</k>: <v>"none"</v>', '}' ]},
+        'ft-payments': { file: 'roles/payments.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"payments"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"payments/**"</v>] },',
+          '  <k>"forbidden"</k>: [<v>"compliance/**"</v>, <v>"customers/**"</v>],',
+          '  <k>"sensitive_data_access"</k>: <v>"tokenized_only"</v>', '}' ]},
+        'ft-compliance': { file: 'roles/compliance.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"compliance"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"compliance/**"</v>] },',
+          '  <k>"forbidden"</k>: [<v>"payments/**"</v>, <v>"dashboard/**"</v>],',
+          '  <k>"sensitivity_tier"</k>: <v>"restricted"</v>', '}' ]},
+        'ft-customers': { file: 'roles/customers.json', lines: [
+          '{', '  <k>"role_name"</k>: <v>"customers"</v>,',
+          '  <k>"scope"</k>: { <k>"writable"</k>: [<v>"customers/**"</v>, <v>"data/**"</v>] },',
+          '  <k>"encryption"</k>: <v>"AES-256-GCM"</v>,',
+          '  <k>"cross_domain"</k>: <v>"masked_and_tokenized_only"</v>', '}' ]},
+        'ft-ledger': { file: 'state/ledger.json', lines: [
+          '{', '  <k>"tasks"</k>: [',
+          '    { <k>"id"</k>: <v>"FT-001"</v>, <k>"agent"</k>: <v>"compliance"</v>, <k>"audit"</k>: <v>true</v> },',
+          '    { <k>"id"</k>: <v>"FT-002"</v>, <k>"agent"</k>: <v>"payments"</v>, <k>"audit"</k>: <v>true</v> }',
+          '  ],', '  <k>"immutable"</k>: <v>true</v>', '}' ]}
+      }
+    };
+
+    function renderLine(raw) {
+      return raw.replace(/<k>/g, '<span class="preview-key">').replace(/<\/k>/g, '</span>')
+                .replace(/<v>/g, '<span class="preview-string">').replace(/<\/v>/g, '</span>');
+    }
+
+    function buildPartial(tagged, visibleCount) {
+      const expanded = renderLine(tagged);
+      let result = '', visible = 0, inTag = false;
+      for (let i = 0; i < expanded.length; i++) {
+        const ch = expanded[i];
+        if (ch === '<') { inTag = true; result += ch; continue; }
+        if (ch === '>') { inTag = false; result += ch; continue; }
+        if (inTag) { result += ch; continue; }
+        if (visible < visibleCount) { result += ch; visible++; } else break;
+      }
+      const opens = (result.match(/<span[^>]*>/g) || []).length;
+      const closes = (result.match(/<\/span>/g) || []).length;
+      for (let i = 0; i < opens - closes; i++) result += '</span>';
+      return result;
+    }
+
+    function stripTags(s) { return s.replace(/<[^>]+>/g, ''); }
+
+    let typeAbort = null;
+
+    function typePreview(previewKey) {
+      if (typeAbort) typeAbort.stop = true;
+      const abort = { stop: false };
+      typeAbort = abort;
+      const data = previewData[currentVariant][previewKey];
+      if (!data) return;
+      const filenameEl = document.getElementById('previewFilename');
+      const bodyEl = document.getElementById('previewBody');
+      const cursor = document.getElementById('typingCursor');
+      filenameEl.textContent = '// ' + data.file;
+      bodyEl.innerHTML = data.lines.map((_, i) => '<div class="preview-line" id="pline-' + i + '"></div>').join('');
+      cursor.style.display = 'inline-block';
+      let lineIdx = 0, charIdx = 0;
+      function tick() {
+        if (abort.stop) return;
+        if (lineIdx >= data.lines.length) { cursor.style.display = 'none'; return; }
+        const plain = stripTags(data.lines[lineIdx]);
+        if (charIdx <= plain.length) {
+          document.getElementById('pline-' + lineIdx).innerHTML = buildPartial(data.lines[lineIdx], charIdx);
+          charIdx++;
+          setTimeout(tick, 14);
+        } else { lineIdx++; charIdx = 0; setTimeout(tick, 30); }
+      }
+      tick();
+    }
+
     function copyInstall(el) {
       navigator.clipboard.writeText('npm install -g aegis-cli');
       const hint = el.querySelector('.copy-hint');
       const copied = el.querySelector('.copied');
       hint.style.opacity = '0';
       copied.classList.add('show');
-      setTimeout(() => {
-        hint.style.opacity = '1';
-        copied.classList.remove('show');
-      }, 2000);
+      setTimeout(() => { hint.style.opacity = '1'; copied.classList.remove('show'); }, 2000);
     }
 
-    // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          if (entry.target.id === 'policyTree') {
-            animateTree('standard');
-          }
+          if (entry.target.id === 'policyTree') animateTree('standard');
         }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // ---- Policy tree logic ----
     let currentVariant = 'standard';
     let autoCycleInterval = null;
     let currentPreviewIndex = 0;
     let treeHasAnimated = { standard: false, fintech: false };
 
-    function getActiveTree() {
-      return document.querySelector('.tree-variant.active');
-    }
-
-    function getPreviewNamesForVariant(variant) {
-      const tree = document.getElementById(variant === 'standard' ? 'treeStandard' : 'treeFintech');
-      return tree.dataset.previews.split(',');
+    function getActiveTree() { return document.querySelector('.tree-variant.active'); }
+    function getPreviewNamesForVariant(v) {
+      return document.getElementById(v === 'standard' ? 'treeStandard' : 'treeFintech').dataset.previews.split(',');
     }
 
     function animateTree(variant) {
       if (treeHasAnimated[variant]) return;
       treeHasAnimated[variant] = true;
-
-      const tree = getActiveTree();
-      const lines = tree.querySelectorAll('.tree-line');
-      lines.forEach((line, i) => {
-        setTimeout(() => line.classList.add('visible'), i * 100);
-      });
-
-      // Show first preview after tree finishes
+      const lines = getActiveTree().querySelectorAll('.tree-line');
+      lines.forEach((line, i) => setTimeout(() => line.classList.add('visible'), i * 100));
       const names = getPreviewNamesForVariant(variant);
-      setTimeout(() => showPreview(names[0]), lines.length * 100 + 200);
-
-      // Show hint after first animation
-      setTimeout(() => {
-        document.getElementById('toggleHint').classList.add('visible');
-      }, lines.length * 100 + 600);
+      setTimeout(() => typePreview(names[0]), lines.length * 100 + 200);
+      setTimeout(() => document.getElementById('toggleHint').classList.add('visible'), lines.length * 100 + 600);
     }
 
-    function showPreview(name) {
-      const allPreviews = document.querySelectorAll('.preview-content');
-      allPreviews.forEach(p => p.classList.remove('visible'));
-
-      const target = document.querySelector(`.preview-content[data-name="${name}"]`);
-      if (target) {
-        setTimeout(() => target.classList.add('visible'), 50);
-      }
-    }
-
-    function stopAutoCycle() {
-      if (autoCycleInterval) {
-        clearInterval(autoCycleInterval);
-        autoCycleInterval = null;
-      }
-    }
+    function stopAutoCycle() { if (autoCycleInterval) { clearInterval(autoCycleInterval); autoCycleInterval = null; } }
 
     function startAutoCycle() {
       stopAutoCycle();
@@ -1837,85 +1832,43 @@
       currentPreviewIndex = 0;
       autoCycleInterval = setInterval(() => {
         currentPreviewIndex = (currentPreviewIndex + 1) % names.length;
-        showPreview(names[currentPreviewIndex]);
-      }, 3000);
+        typePreview(names[currentPreviewIndex]);
+      }, 4500);
     }
 
     function switchVariant(variant) {
       if (variant === currentVariant) return;
       currentVariant = variant;
       stopAutoCycle();
-
-      // Toggle buttons
-      document.querySelectorAll('.tree-toggle-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.variant === variant);
-      });
-
-      // Toggle trees
+      document.querySelectorAll('.tree-toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.variant === variant));
       document.querySelectorAll('.tree-variant').forEach(t => t.classList.remove('active'));
-      const targetTree = document.getElementById(variant === 'standard' ? 'treeStandard' : 'treeFintech');
-      targetTree.classList.add('active');
-
-      // Hide all previews
-      document.querySelectorAll('.preview-content').forEach(p => p.classList.remove('visible'));
-
-      // Clear any highlighted lines
-      document.querySelectorAll('.tree-line').forEach(l => {
-        l.style.background = 'none';
-        l.style.margin = '';
-        l.style.padding = '';
-      });
-
-      // Animate if first time, otherwise just show first preview
-      if (!treeHasAnimated[variant]) {
-        animateTree(variant);
-      } else {
-        const names = getPreviewNamesForVariant(variant);
-        showPreview(names[0]);
-      }
-
-      // Restart auto-cycle
-      setTimeout(() => startAutoCycle(), 1500);
+      document.getElementById(variant === 'standard' ? 'treeStandard' : 'treeFintech').classList.add('active');
+      document.querySelectorAll('.tree-line').forEach(l => { l.style.background = 'none'; l.style.margin = ''; l.style.padding = ''; });
+      if (!treeHasAnimated[variant]) { animateTree(variant); }
+      else { typePreview(getPreviewNamesForVariant(variant)[0]); }
+      setTimeout(() => startAutoCycle(), 2000);
     }
 
-    // Click on tree lines to show preview
     document.addEventListener('click', (e) => {
       const line = e.target.closest('.tree-line[data-preview]');
       if (!line) return;
-
-      showPreview(line.dataset.preview);
+      typePreview(line.dataset.preview);
       stopAutoCycle();
-
-      // Highlight active line within the active tree only
-      const tree = line.closest('.tree-variant');
-      tree.querySelectorAll('.tree-line').forEach(l => {
-        l.style.background = 'none';
-        l.style.margin = '';
-        l.style.padding = '';
-      });
+      line.closest('.tree-variant').querySelectorAll('.tree-line').forEach(l => { l.style.background = 'none'; l.style.margin = ''; l.style.padding = ''; });
       line.style.background = 'rgba(74, 144, 226, 0.06)';
       line.style.borderRadius = '4px';
       line.style.margin = '0 -8px';
       line.style.padding = '0 8px';
     });
-
-    // Set cursor on clickable lines
     document.querySelectorAll('.tree-line[data-preview]').forEach(l => l.style.cursor = 'pointer');
 
-    // Pause auto-cycle on hover, resume on leave
     const treeWrapper = document.getElementById('policyTree');
     treeWrapper.addEventListener('mouseenter', stopAutoCycle);
-    treeWrapper.addEventListener('mouseleave', () => {
-      if (treeHasAnimated[currentVariant]) startAutoCycle();
-    });
+    treeWrapper.addEventListener('mouseleave', () => { if (treeHasAnimated[currentVariant]) startAutoCycle(); });
 
-    // Start auto-cycle when tree scrolls into view
-    const treeObserver = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && treeHasAnimated.standard) {
-        setTimeout(() => startAutoCycle(), 2000);
-      }
-    }, { threshold: 0.1 });
-    treeObserver.observe(treeWrapper);
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && treeHasAnimated.standard) setTimeout(() => startAutoCycle(), 2500);
+    }, { threshold: 0.1 }).observe(treeWrapper);
   </script>
 
 </body>
