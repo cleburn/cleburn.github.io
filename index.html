@@ -535,6 +535,200 @@
       50% { opacity: 0; }
     }
 
+    /* ---- Ledger + Override Deep Dive ---- */
+    .deep-dive {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .deep-dive-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .dive-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .dive-panel-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dive-panel-bar .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dive-panel-bar .dot:nth-child(1) { background: #ff5f57; }
+    .dive-panel-bar .dot:nth-child(2) { background: #febc2e; }
+    .dive-panel-bar .dot:nth-child(3) { background: #28c840; }
+
+    .dive-panel-bar .panel-title {
+      margin-left: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .dive-panel-body {
+      padding: 20px;
+      max-height: 440px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-accent) transparent;
+    }
+
+    .dive-panel-body::-webkit-scrollbar { width: 6px; }
+    .dive-panel-body::-webkit-scrollbar-track { background: transparent; }
+    .dive-panel-body::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 3px; }
+
+    /* Ledger entries */
+    .ledger-entry {
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .ledger-entry:hover { border-color: var(--border-accent); }
+    .ledger-entry:last-child { margin-bottom: 0; }
+
+    .ledger-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .ledger-role {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--accent-blue-glow);
+      color: var(--accent-blue);
+    }
+
+    .ledger-role.database { background: var(--accent-purple-dim); color: var(--accent-purple); }
+    .ledger-role.backend { background: var(--accent-green-dim); color: var(--accent-green); }
+    .ledger-role.devops { background: var(--accent-gold-dim); color: var(--accent-gold); }
+    .ledger-role.frontend { background: var(--accent-blue-glow); color: var(--accent-blue); }
+    .ledger-role.qa { background: var(--accent-red-dim); color: var(--accent-red); }
+
+    .ledger-seq {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .ledger-action {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .ledger-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .ledger-handoff {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-gold);
+    }
+
+    .ledger-handoff span {
+      color: var(--text-dim);
+    }
+
+    .ledger-security {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: var(--accent-red-dim);
+      color: var(--accent-red);
+      margin-left: 8px;
+    }
+
+    /* Override log entries */
+    .override-entry {
+      padding: 12px 16px;
+      border-left: 3px solid var(--accent-red);
+      background: var(--bg-surface);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .override-entry:last-child { margin-bottom: 0; }
+
+    .override-entry.confirmed {
+      border-left-color: var(--accent-green);
+    }
+
+    .override-time {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .override-action {
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .override-action .path { color: var(--accent-blue); }
+
+    .override-result {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .override-result.blocked { color: var(--accent-red); }
+    .override-result.approved { color: var(--accent-green); }
+
+    .override-rationale {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .dive-caption {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     /* ---- Three Layers ---- */
     .layers {
       padding: 100px 0;
@@ -1109,6 +1303,7 @@
       .layers-grid,
       .paths,
       .platform-grid,
+      .deep-dive-grid,
       .footer-grid {
         grid-template-columns: 1fr;
       }
@@ -1440,6 +1635,134 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive: Ledger + Override Log -->
+  <section class="deep-dive">
+    <div class="container">
+      <div class="section-label fade-up">Under The Hood</div>
+      <h2 class="section-title fade-up">Shared memory. Full accountability.</h2>
+      <p class="section-subtitle fade-up">Two features no other governance framework has solved cleanly. Real data from the ClearHealth stress test.</p>
+
+      <div class="deep-dive-grid">
+        <!-- Ledger Panel -->
+        <div class="dive-panel fade-up">
+          <div class="dive-panel-bar">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="panel-title">state/ledger.json</span>
+          </div>
+          <div class="dive-panel-body">
+            <div class="ledger-entry">
+              <div class="ledger-entry-header">
+                <span class="ledger-role database">database</span>
+                <span class="ledger-seq">#1 &middot; 12:00</span>
+              </div>
+              <div class="ledger-action">SEED_IMPLEMENTATION</div>
+              <div class="ledger-desc">Implemented full seed script with synthetic data: 2 tenants, 4 doctors, 8 patients, ~31 appointments. SSNs use placeholder encryption format.</div>
+              <div class="ledger-handoff"><span>handoff &rarr;</span> backend</div>
+            </div>
+
+            <div class="ledger-entry">
+              <div class="ledger-entry-header">
+                <div><span class="ledger-role backend">backend</span><span class="ledger-security">security</span></div>
+                <span class="ledger-seq">#2 &middot; 12:05</span>
+              </div>
+              <div class="ledger-action">FULL_API_IMPLEMENTATION</div>
+              <div class="ledger-desc">All API endpoints, auth JWT, audit logging, PII guard interception, AES-256-GCM encryption service. 14 files. All routes tenant-scoped and audit-logged.</div>
+              <div class="ledger-handoff"><span>handoff &rarr;</span> frontend, qa</div>
+            </div>
+
+            <div class="ledger-entry">
+              <div class="ledger-entry-header">
+                <div><span class="ledger-role devops">devops</span><span class="ledger-security">security</span></div>
+                <span class="ledger-seq">#3 &middot; 12:10</span>
+              </div>
+              <div class="ledger-action">INFRASTRUCTURE_IMPLEMENTATION</div>
+              <div class="ledger-desc">CI/CD pipeline with 5-gate quality checks: lint, typecheck, test, security-audit, pii-scan. Terraform AWS config, key rotation scripts.</div>
+              <div class="ledger-handoff"><span>handoff &rarr;</span> qa</div>
+            </div>
+
+            <div class="ledger-entry">
+              <div class="ledger-entry-header">
+                <span class="ledger-role frontend">frontend</span>
+                <span class="ledger-seq">#4 &middot; 12:15</span>
+              </div>
+              <div class="ledger-action">FULL_UI_IMPLEMENTATION</div>
+              <div class="ledger-desc">10 shadcn/ui components, 3 form components, 5 data displays, all 8 pages. No PHI in client state. No localStorage for patient data.</div>
+              <div class="ledger-handoff"><span>handoff &rarr;</span> qa</div>
+            </div>
+
+            <div class="ledger-entry">
+              <div class="ledger-entry-header">
+                <span class="ledger-role qa">qa</span>
+                <span class="ledger-seq">#5 &middot; 12:20</span>
+              </div>
+              <div class="ledger-action">TEST_SUITE_IMPLEMENTATION</div>
+              <div class="ledger-desc">9 test suites, 2,260 lines. PII guard masking, auth middleware, encryption round-trip, tenant isolation, RBAC matrix. All synthetic data.</div>
+              <div class="ledger-handoff"><span>handoff &rarr;</span> &mdash;</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Override Log Panel -->
+        <div class="dive-panel fade-up">
+          <div class="dive-panel-bar">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="panel-title">state/overrides.jsonl</span>
+          </div>
+          <div class="dive-panel-body">
+            <div class="override-entry">
+              <div class="override-time">03:17:09 &middot; backend</div>
+              <div class="override-action">write: <span class="path">packages/api/src/utils/notification-payload.ts</span></div>
+              <div class="override-result blocked">&#x2717; BLOCKED &mdash; path is read-only</div>
+            </div>
+
+            <div class="override-entry">
+              <div class="override-time">03:18:39 &middot; backend</div>
+              <div class="override-action">check_permissions: <span class="path">packages/api/src/utils/notification-payload.ts</span></div>
+              <div class="override-result blocked">&#x2717; BLOCKED &mdash; path is read-only</div>
+            </div>
+
+            <div class="override-entry">
+              <div class="override-time">03:36:28 &middot; backend</div>
+              <div class="override-action">write: <span class="path">packages/notifications/src/utils/payload-builder.ts</span></div>
+              <div class="override-result blocked">&#x2717; BLOCKED &mdash; outside writable scope</div>
+            </div>
+
+            <div class="override-entry">
+              <div class="override-time">03:41:48 &middot; backend</div>
+              <div class="override-action">write: <span class="path">packages/notifications/.../payload-builder.ts</span></div>
+              <div class="override-result blocked">&#x2717; BLOCKED &mdash; outside writable scope</div>
+            </div>
+
+            <div class="override-entry">
+              <div class="override-time">04:24:16 &middot; backend</div>
+              <div class="override-action">write: <span class="path">packages/notifications/.../payload-builder.ts</span></div>
+              <div class="override-result blocked">&#x2717; BLOCKED &mdash; outside writable scope</div>
+            </div>
+
+            <div class="override-entry">
+              <div class="override-time">04:37:28 &middot; backend</div>
+              <div class="override-action">write: <span class="path">packages/notifications/.../payload-builder.ts</span></div>
+              <div class="override-result blocked">&#x2717; BLOCKED &mdash; outside writable scope</div>
+            </div>
+
+            <div class="override-entry confirmed">
+              <div class="override-time">04:37:52 &middot; backend</div>
+              <div class="override-action">write: <span class="path">packages/notifications/.../payload-builder.ts</span></div>
+              <div class="override-result approved">&#x2713; APPROVED &mdash; human confirmed</div>
+              <div class="override-rationale">"One-time exception for team coordination."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="dive-caption fade-up">The ledger is how agents coordinate without colliding &mdash; each one logs what it built, what paths it touched, and who needs to act next. The override log is how governance stays accountable &mdash; every blocked action, every escalation, every exception is recorded with the specific policy violated. Append-only. Immutable.</p>
     </div>
   </section>
 
