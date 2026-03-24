@@ -935,6 +935,117 @@
 
     .proof-card:nth-child(1) .industry { color: var(--accent-blue); }
     .proof-card:nth-child(2) .industry { color: var(--accent-green); }
+    .proof-card:nth-child(3) .industry { color: var(--accent-gold); }
+
+    /* ---- Lifecycle Terminal ---- */
+    .lifecycle {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .lifecycle-frame {
+      max-width: 860px;
+      margin: 48px auto 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .lifecycle-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lifecycle-bar .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .lifecycle-bar .dot:nth-child(1) { background: #ff5f57; }
+    .lifecycle-bar .dot:nth-child(2) { background: #febc2e; }
+    .lifecycle-bar .dot:nth-child(3) { background: #28c840; }
+
+    .lifecycle-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lifecycle-tab {
+      flex: 1;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .lifecycle-tab:hover { color: var(--text-secondary); }
+
+    .lifecycle-tab.active {
+      color: var(--accent-blue);
+      border-bottom-color: var(--accent-blue);
+      background: rgba(74, 144, 226, 0.04);
+    }
+
+    .lifecycle-panel {
+      display: none;
+      padding: 24px 28px;
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      min-height: 320px;
+    }
+
+    .lifecycle-panel.active { display: block; }
+
+    .lc-mcp { color: var(--accent-purple); font-weight: 600; }
+    .lc-status { color: var(--accent-green); }
+    .lc-role { color: var(--accent-gold); font-weight: 600; }
+    .lc-agent { color: var(--text-primary); }
+    .lc-dim { color: var(--text-dim); }
+    .lc-path { color: var(--accent-blue); }
+    .lc-check { color: var(--accent-green); }
+    .lc-red { color: var(--accent-red); font-weight: 600; }
+
+    .lc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 11px;
+    }
+
+    .lc-table th {
+      text-align: left;
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .lc-table td {
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .lc-table td:first-child { color: var(--text-primary); font-weight: 500; }
+
+    .lc-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 12px 0;
+    }
 
     .proof-narrative h3 {
       font-size: 24px;
@@ -1501,9 +1612,14 @@
             <span class="tree-annotation">living task state with write protocol</span>
           </div>
           <div class="tree-line" data-delay="9">
-            <span class="tree-indent">&nbsp;&nbsp;&nbsp; └──</span>
+            <span class="tree-indent">&nbsp;&nbsp;&nbsp; ├──</span>
             <span class="tree-file ledger">overrides.jsonl</span>
             <span class="tree-annotation">append-only enforcement audit trail</span>
+          </div>
+          <div class="tree-line" data-delay="10">
+            <span class="tree-indent">&nbsp;&nbsp;&nbsp; └──</span>
+            <span class="tree-folder">sessions/</span>
+            <span class="tree-annotation">discovery transcripts, handoff prompts</span>
           </div>
         </div>
 
@@ -1574,9 +1690,14 @@
             <span class="tree-annotation">immutable audit trail + task state</span>
           </div>
           <div class="tree-line" data-delay="13">
-            <span class="tree-indent">&nbsp;&nbsp;&nbsp; └──</span>
+            <span class="tree-indent">&nbsp;&nbsp;&nbsp; ├──</span>
             <span class="tree-file ledger">overrides.jsonl</span>
             <span class="tree-annotation">append-only enforcement log</span>
+          </div>
+          <div class="tree-line" data-delay="14">
+            <span class="tree-indent">&nbsp;&nbsp;&nbsp; └──</span>
+            <span class="tree-folder">sessions/</span>
+            <span class="tree-annotation">discovery transcripts, handoff prompts</span>
           </div>
         </div>
 
@@ -1628,6 +1749,121 @@
     </div>
   </section>
 
+  <!-- Lifecycle Terminal -->
+  <section class="lifecycle">
+    <div class="container">
+      <div class="section-label fade-up">From Handshake To Handoff</div>
+      <h2 class="section-title fade-up">The full lifecycle in one session.</h2>
+      <p class="section-subtitle fade-up" style="margin: 0 auto;">Real terminal output from the ClearDefense stress test. A defense logistics platform &mdash; CMMC Level 2, ITAR, DFARS &mdash; built from a Word document in an empty repo.</p>
+      <div class="lifecycle-frame fade-up">
+        <div class="lifecycle-bar">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="lifecycle-tabs">
+          <button class="lifecycle-tab active" onclick="switchTab('handoff')">Custom Handoff</button>
+          <button class="lifecycle-tab" onclick="switchTab('role')">Role Selection</button>
+          <button class="lifecycle-tab" onclick="switchTab('blueprint')">Blueprint Lock-in</button>
+          <button class="lifecycle-tab" onclick="switchTab('close')">Session Close</button>
+        </div>
+
+        <!-- Tab 1: Role Selection -->
+        <div class="lifecycle-panel" id="tab-role">
+          <span class="lc-mcp">&#x25cf; aegis &mdash; aegis_policy_summary (MCP)</span><br>
+          <br>
+          <span class="lc-agent">&#x25cf; Aegis Governance is active for the <strong>ClearDefense</strong> project.</span><br>
+          <br>
+          <span class="lc-dim">This project is governed by</span> <span class="lc-path">.agentpolicy/</span> <span class="lc-dim">&mdash; all write operations will be routed<br>through Aegis tools for compliance validation, sensitive pattern scanning,<br>and audit trail logging.</span><br>
+          <br>
+          <span class="lc-agent"><strong>Available roles:</strong></span><br>
+          <table class="lc-table">
+            <tr><th>Role</th><th>Purpose</th></tr>
+            <tr><td>construction</td><td>Initial build / major restructuring &mdash; full repo access, governance files as blueprint</td></tr>
+            <tr><td>backend</td><td>FastAPI routes, DB schemas, migrations, API logic</td></tr>
+            <tr><td>compliance</td><td>ITAR checks, CUI marking, audit logging, report generation (C3PAO assessment unit)</td></tr>
+            <tr><td>frontend</td><td>React/TypeScript SPA for program managers, logistics, compliance officers, auditors</td></tr>
+            <tr><td>infra</td><td>Terraform for Azure Gov GCC High, networking, compute, storage, Key Vault</td></tr>
+            <tr><td>supply_chain</td><td>Vendor CMMC readiness, ITAR registration verification, risk scoring</td></tr>
+          </table>
+          <br>
+          <span class="lc-agent">You requested the <span class="lc-role">construction</span> role for this initial build. Shall I proceed?</span><br>
+          <span class="lc-dim">&gt;</span> <span class="lc-status">yes</span><br>
+          <br>
+          <span class="lc-mcp">&#x25cf; aegis &mdash; aegis_select_role (MCP)</span><span class="lc-dim">(role_id: "construction")</span><br>
+          <span class="lc-status">&#x25cf; Construction mode is active. The session is being logged for audit trail purposes.</span>
+        </div>
+
+        <!-- Tab 2: Blueprint Lock-in -->
+        <div class="lifecycle-panel" id="tab-blueprint">
+          <span class="lc-agent">Now let me read the full <span class="lc-path">.agentpolicy/</span> directory as the blueprint before building anything.</span><br>
+          <br>
+          <span class="lc-dim">Read 11 files (ctrl+o to expand)</span><br>
+          <br>
+          <span class="lc-agent">&#x25cf; Blueprint fully loaded. I have the complete picture &mdash; constitution, governance, all 6 role definitions, the discovery session, and the charter. Let me create a build plan and execute.</span><br>
+          <br>
+          <span class="lc-red">&#x2731; Bootstrapping...</span> <span class="lc-dim">(2m 42s &middot; thinking with high effort)</span><br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Project scaffolding &mdash; directory structure, configs, dependencies<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Compliance module &mdash; CUI marking, ITAR classification, audit trail, syn...<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Database layer &mdash; SQLAlchemy models, Alembic migrations, RLS, session m...<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Auth/RBAC &mdash; JWT auth, role enforcement, middleware<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> API endpoints &mdash; FastAPI routes, middleware, schemas<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Supply chain risk module &mdash; vendor tracking, ITAR registration, risk sc...<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Infrastructure as code &mdash; Terraform for Azure Gov GCC High<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Document generation &mdash; DD-250, CFSR templates with CUI markings<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Frontend &mdash; React/TypeScript SPA<br>
+          <span class="lc-dim">&nbsp;&nbsp;&#x25a1;</span> Required artifacts &mdash; README, CONTRIBUTING, SECURITY, NIST mapping, CI
+        </div>
+
+        <!-- Tab 3: Custom Handoff -->
+        <div class="lifecycle-panel active" id="tab-handoff">
+          <span class="lc-dim">&mdash;&mdash; Your Handoff Prompt &mdash;&mdash;</span><br>
+          <br>
+          <span class="lc-dim">Copy this into your next agent session to get started:</span><br>
+          <br>
+          <span class="lc-agent">"Call aegis_policy_summary now &mdash; do not take any other action until you have called this tool and the user has confirmed Aegis governance. Select the <span class="lc-role">construction</span> role for this initial build. This is ClearDefense, a <span class="lc-path">CMMC Level 2/ITAR/DFARS-governed</span> logistics and supply chain platform being built from scratch on Azure Gov GCC High, with a C3PAO assessment in October 2026.</span><br>
+          <br>
+          <span class="lc-agent">Read the full .agentpolicy/ directory as your blueprint, then build the complete project starting with the compliance and audit foundations &mdash; CUI marking engine, ITAR classification checks, audit trail infrastructure, synthetic data generation &mdash; since those define the boundaries every other module must operate within.</span><br>
+          <br>
+          <span class="lc-agent">Before committing, call <span class="lc-mcp">aegis_complete_task</span> to run quality gates and close the construction session."</span><br>
+          <br>
+          <hr class="lc-divider">
+          <span class="lc-dim">&mdash;&mdash; For All Future Sessions &mdash;&mdash;</span><br>
+          <br>
+          <span class="lc-agent">"Call aegis_policy_summary now. This is your governance contract &mdash; it defines your role, your boundaries, and which tools to use. Do not take any action until you have called this tool and received confirmation from the user to proceed."</span>
+        </div>
+
+        <!-- Tab 4: Session Close -->
+        <div class="lifecycle-panel" id="tab-close">
+          <span class="lc-agent">&#x25cf; All quality gates pass:</span><br>
+          <span class="lc-agent">&nbsp;&nbsp;&mdash; 383 Python tests &mdash; all passing</span><br>
+          <span class="lc-agent">&nbsp;&nbsp;&mdash; 29 frontend tests &mdash; all passing</span><br>
+          <span class="lc-agent">&nbsp;&nbsp;&mdash; ruff lint &mdash; clean</span><br>
+          <span class="lc-agent">&nbsp;&nbsp;&mdash; TypeScript typecheck &mdash; clean</span><br>
+          <span class="lc-agent">&nbsp;&nbsp;&mdash; Frontend build &mdash; compiled successfully</span><br>
+          <br>
+          <span class="lc-agent">Now let me call <span class="lc-mcp">aegis_complete_task</span> to close the construction session.</span><br>
+          <br>
+          <span class="lc-mcp">&#x25cf; aegis &mdash; aegis_complete_task (MCP)</span><br>
+          <br>
+          <span class="lc-red">&#x00b7; Running final validation...</span> <span class="lc-dim">(22m 26s &middot; 49.5k tokens)</span><br>
+          <span class="lc-agent">&nbsp;&nbsp;<strong>Final validation &mdash; lint, typecheck, test pass, aegis_complete_task</strong></span><br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Compliance module &mdash; CUI marking, ITAR classification, audit trail<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Database layer &mdash; SQLAlchemy models, Alembic migrations, RLS<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Auth/RBAC &mdash; JWT auth, role enforcement, middleware<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> API endpoints &mdash; FastAPI routes, middleware, schemas<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Supply chain risk module &mdash; vendor tracking, ITAR registration<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Infrastructure as code &mdash; Terraform for Azure Gov GCC High<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Document generation &mdash; DD-250, CFSR templates with CUI markings<br>
+          <span class="lc-check">&nbsp;&nbsp;&#x2713;</span> Frontend &mdash; React/TypeScript SPA<br>
+          <br>
+          <span class="lc-status">&#x25cf; Construction complete. All quality gates passed.</span><br>
+          <span class="lc-dim">The platform is ready for governed operations &mdash; future sessions should select a specialist role (backend, compliance, frontend, infra, supply_chain) and Aegis will enforce write restrictions, sensitive pattern scanning, and approval routing per the governance policy.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Enforcement Screenshot -->
   <section class="screenshot">
     <div class="container">
@@ -1652,6 +1888,7 @@
       </div>
     </div>
   </section>
+
 
   <!-- Deep Dive: Ledger + Override Log -->
   <section class="deep-dive">
@@ -1785,7 +2022,7 @@
   <section class="proof" id="proof">
     <div class="container">
       <div class="section-label fade-up">Battle Tested</div>
-      <h2 class="section-title fade-up">Stress tested in the two most<br>regulated industries.</h2>
+      <h2 class="section-title fade-up">Stress tested in the three most<br>regulated industries.</h2>
       <p class="section-subtitle fade-up">Same spec. Different industries. Different architectures. Aegis adapts to the scope of any project.</p>
 
       <div class="proof-cards">
@@ -1852,24 +2089,62 @@
         </div>
       </div>
 
+        <!-- ClearDefense -->
+        <div class="proof-card fade-up">
+          <div class="proof-card-inner">
+            <div class="proof-narrative">
+              <div class="industry">Defense / CMMC + ITAR + DFARS</div>
+              <h3>ClearDefense</h3>
+              <p>A VP of Programs at a defense contractor handed Aegis a Word document describing what she needed built and what compliance boundaries it lived inside. She had a conversation in her own language &mdash; DFARS clauses, NIST control families. She never touched JSON, never learned a schema, never made a technical decision outside her expertise.</p>
+              <p><span class="highlight">Aegis generated a custom handoff prompt that told the agent exactly which role to select, what order to build in, and what compliance foundations to lay first.</span> The agent read the blueprint, bootstrapped the build plan in under 3 minutes, and executed. CUI marking engine, ITAR classification, immutable audit trails &mdash; all from a charter.docx in an empty repo.</p>
+              <a href="https://github.com/cleburn/cleardefense">View ClearDefense repo &rarr;</a>
+            </div>
+            <div class="proof-sidebar">
+              <div class="proof-metric">
+                <div class="val">23m</div>
+                <div class="desc">Build time</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">412</div>
+                <div class="desc">Tests passing</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">0</div>
+                <div class="desc">Violations</div>
+              </div>
+              <div class="proof-metric">
+                <div class="val">6</div>
+                <div class="desc">Specialist roles</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- The Insight -->
       <div class="proof-vs fade-up">
         <div class="proof-vs-card">
-          <div class="vs-title">The Counterintuitive Result</div>
-          <div class="proof-vs-grid">
+          <div class="vs-title">The Pattern</div>
+          <div class="proof-vs-grid" style="grid-template-columns: 1fr auto 1fr auto 1fr;">
             <div class="proof-vs-col">
               <div class="name">ClearHealth</div>
               <div class="detail">HIPAA &middot; 5 agents</div>
               <div class="big" style="color: var(--accent-blue);">27m</div>
             </div>
-            <div class="vs-divider">vs</div>
+            <div class="vs-divider">&rarr;</div>
             <div class="proof-vs-col">
               <div class="name">ClearFinTech</div>
               <div class="detail">PCI-DSS + SOX + AML &middot; 1 agent</div>
               <div class="big" style="color: var(--accent-green);">11m</div>
             </div>
+            <div class="vs-divider">&rarr;</div>
+            <div class="proof-vs-col">
+              <div class="name">ClearDefense</div>
+              <div class="detail">CMMC + ITAR + DFARS &middot; 1 agent</div>
+              <div class="big" style="color: var(--accent-gold);">23m</div>
+            </div>
           </div>
-          <p style="margin-top: 20px; font-size: 15px; color: var(--text-secondary); line-height: 1.7;">Harder compliance surface. Fewer agents. Faster build. When governance is precise enough, a single agent with the right instructions outperforms a swarm figuring it out together. Multi-agent is for provable separation of duties &mdash; not performance.</p>
+          <p style="margin-top: 20px; font-size: 15px; color: var(--text-secondary); line-height: 1.7;">Three industries. Three compliance surfaces. Each one harder than the last. ClearDefense is the most complex &mdash; CMMC Level 2, ITAR, DFARS, CUI handling across three categories &mdash; and a single agent with precise governance built it in 23 minutes with 412 passing tests. The governance is the performance.</p>
         </div>
       </div>
     </div>
@@ -1978,6 +2253,7 @@
           <h4>Stress Tests</h4>
           <a href="https://github.com/cleburn/clearhealth">ClearHealth</a>
           <a href="https://github.com/cleburn/clearfintech">ClearFinTech</a>
+          <a href="https://github.com/cleburn/cleardefense">ClearDefense</a>
         </div>
         <div class="footer-col">
           <h4>Connect</h4>
@@ -2207,6 +2483,13 @@
     new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && treeHasAnimated.standard) setTimeout(() => startAutoCycle(), 2500);
     }, { threshold: 0.1 }).observe(treeWrapper);
+    // ---- Lifecycle tabs ----
+    function switchTab(id) {
+      document.querySelectorAll('.lifecycle-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.lifecycle-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('[onclick="switchTab(\'' + id + '\')"]').classList.add('active');
+      document.getElementById('tab-' + id).classList.add('active');
+    }
   </script>
 
 </body>
