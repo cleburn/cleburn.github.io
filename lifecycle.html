@@ -528,11 +528,12 @@ function setPauseHintPos(pos) {
 
 function fitFull() {
   const sx = vw() / 1600;
-  const sy = vh() / 12000;
-  const s = Math.min(sx, sy) * 0.85;
+  const sy = vh() / 1200;
+  const s = Math.min(sx, sy);
+  const totalCanvasHeight = 1200 * s;
+  const yOffset = (vh() - totalCanvasHeight) / 2 / s;
   const ox = (vw() / s - 1600) / 2;
-  const oy = (vh() / s - 1200) / 2;
-  setView(-ox, -oy + 130, s);
+  setView(-ox, yOffset, s);
 }
 
 function zoomToStage(stageId) {
@@ -558,7 +559,7 @@ function zoomToStage(stageId) {
 function showEls(stage, interval) {
   const els = document.querySelectorAll(`[data-stage="${stage}"]`);
   els.forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), i * interval);
+    pendingTimeouts.push(setTimeout(() => el.classList.add('visible'), i * interval);
   });
 }
 
@@ -597,7 +598,7 @@ const timeline = [
     hideEls(1);
     zoomToStage('stage1');
     setPauseHintPos('top-left');
-    setTimeout(() => { showEls(1, 500); revealed[1] = true; }, 800);
+    pendingTimeouts.push(setTimeout(() => { showEls(1, 500); revealed[1] = true; }, 800);
   }},
   // Zoom into stage 2 (12-20s)
   { t: 12000, action: () => {
@@ -605,7 +606,7 @@ const timeline = [
     hideEls(2);
     zoomToStage('stage2');
     setPauseHintPos('top-right');
-    setTimeout(() => { showEls(2, 500); revealed[2] = true; }, 800);
+    pendingTimeouts.push(setTimeout(() => { showEls(2, 500); revealed[2] = true; }, 800);
   }},
   // Zoom into stage 3 (20-29s)
   { t: 20000, action: () => {
@@ -613,7 +614,7 @@ const timeline = [
     hideEls(3);
     zoomToStage('stage3');
     setPauseHintPos('bottom-left');
-    setTimeout(() => { showEls(3, 450); revealed[3] = true; }, 800);
+    pendingTimeouts.push(setTimeout(() => { showEls(3, 450); revealed[3] = true; }, 800);
   }},
   // Zoom into stage 4 (29-37s)
   { t: 29000, action: () => {
@@ -621,7 +622,7 @@ const timeline = [
     hideEls(4);
     zoomToStage('stage4');
     setPauseHintPos('bottom-right');
-    setTimeout(() => { showEls(4, 450); revealed[4] = true; }, 800);
+    pendingTimeouts.push(setTimeout(() => { showEls(4, 450); revealed[4] = true; }, 800);
   }},
   // Closing: zoom out, all content stays, closing overlay (37-42s)
   { t: 37000, action: () => {
@@ -629,7 +630,7 @@ const timeline = [
     showAllContent();
     fitFull();
     pauseHint.style.opacity = '0';
-    setTimeout(() => closingOverlay.classList.add('visible'), 1000);
+    pendingTimeouts.push(setTimeout(() => closingOverlay.classList.add('visible'), 1000);
   }},
 ];
 
@@ -665,11 +666,17 @@ function tick(now) {
   requestAnimationFrame(tick);
 }
 
+let pendingTimeouts = [];
+
 function togglePause() {
   paused = !paused;
   lastTime = null;
   pauseIndicator.style.opacity = paused ? '1' : '0';
   pauseIndicator.textContent = paused ? '\u23F8 paused \u2014 tap to resume' : '';
+  if (paused) {
+    pendingTimeouts.forEach(t => clearTimeout(t));
+    pendingTimeouts = [];
+  }
 }
 
 fitFull();
