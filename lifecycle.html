@@ -491,9 +491,6 @@
 <div class="pause-hint" id="pauseHint">tap to pause / resume</div>
 
 <script>
-document.addEventListener('touchmove', function(e) {
-  e.preventDefault();
-}, { passive: false });
 const canvas = document.getElementById('canvas');
 const viewport = document.getElementById('viewport');
 const progressBar = document.getElementById('progressBar');
