@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0d1017;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    color: #e2e8f0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 23px, #21262d33 23px, #21262d33 24px),
+                       repeating-linear-gradient(90deg, transparent, transparent 23px, #21262d33 23px, #21262d33 24px);
+    opacity: 0.4;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 48px 56px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 48px;
+    overflow: visible;
+  }
+
+  .shield {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: #e2e8f0;
+  }
+
+  .middle {
+    display: flex;
+    flex: 1;
+    gap: 60px;
+  }
+
+  .left {
+    flex: 1;
+  }
+
+  h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 28px;
+  }
+
+  h1 .gradient {
+    color: #4a90e2;
+  }
+
+  .tagline {
+    font-size: 15px;
+    color: #8892a8;
+    line-height: 1.6;
+  }
+
+  .right {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 16px;
+  }
+
+  .tree {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #5a6478;
+  }
+
+  .tree .folder { color: #4a90e2; }
+  .tree .file-blue { color: #4a90e2; }
+  .tree .file-green { color: #4ade80; }
+  .tree .file-gold { color: #f0c040; }
+  .tree .file-red { color: #f87171; }
+  .tree .file-purple { color: #a78bfa; }
+  .tree .file-text { color: #e2e8f0; }
+
+  .bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr 1fr;
+    border-top: 1px solid #1e2433;
+    padding-top: 20px;
+    margin-top: auto;
+    gap: 16px;
+  }
+
+  .stat {
+    flex: 1;
+  }
+
+  .stat .val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 2px;
+  }
+
+  .stat .label {
+    font-size: 11px;
+    color: #5a6478;
+  }
+
+  .stat.green .val { color: #4ade80; }
+
+  .url {
+    position: absolute;
+    bottom: 24px;
+    right: 56px;
+    font-size: 12px;
+    color: #5a6478;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="grid"></div>
+
+<div class="content">
+  <div class="top">
+    <svg class="shield" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+      <path d="M22 3L5 11.5V22C5 32.5 12.5 42 22 44C31.5 42 39 32.5 39 22V11.5L22 3Z" fill="#131720" stroke="url(#sg)" stroke-width="3" stroke-linejoin="round"/>
+      <defs><linearGradient id="sg" x1="22" y1="3" x2="22" y2="44"><stop stop-color="#58a6ff"/><stop offset="1" stop-color="#1f6feb"/></linearGradient></defs>
+      <line x1="14" y1="17" x2="30" y2="17" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="14" y1="22" x2="30" y2="22" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+      <line x1="14" y1="27" x2="25" y2="27" stroke="#4a90e2" stroke-width="2" stroke-linecap="round"/>
+      <polyline points="20,32 24,36 32,27" stroke="#4ade80" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand">AEGIS</span>
+  </div>
+
+  <div class="middle">
+    <div class="left">
+      <h1>Non-negotiable<br>compliance.<br><span class="gradient">Automated.</span></h1>
+      <div class="tagline">Policy at the root. Enforcement at runtime.<br>Accountability on every action.</div>
+    </div>
+    <div class="right">
+      <div class="tree">
+        <span class="folder">.agentpolicy/</span><br>
+        ├── <span class="file-blue">constitution.json</span><br>
+        ├── <span class="file-green">governance.json</span><br>
+        ├── <span class="folder">roles/</span><br>
+        │&nbsp;&nbsp; ├── <span class="file-gold">backend.json</span><br>
+        │&nbsp;&nbsp; ├── <span class="file-red">compliance.json</span><br>
+        │&nbsp;&nbsp; └── <span class="file-gold">frontend.json</span><br>
+        └── <span class="folder">state/</span><br>
+        &nbsp;&nbsp;&nbsp; ├── <span class="file-purple">ledger.json</span><br>
+        &nbsp;&nbsp;&nbsp; └── <span class="file-purple">overrides.jsonl</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="stat">
+      <div class="val">3</div>
+      <div class="label">Stress Tests</div>
+    </div>
+    <div class="stat">
+      <div class="val">586+</div>
+      <div class="label">Tests Passing</div>
+    </div>
+    <div class="stat green">
+      <div class="val">3rd Party Testing</div>
+      <div class="label">Checkov GitHub Actions Passed</div>
+    </div>
+    <div class="stat">
+      <div class="val">Open Source</div>
+      <div class="label">Apache 2.0 + MIT</div>
+    </div>
+  </div>
+</div>
+
+<div class="url">cleburn.github.io</div>
+
+</body>
+</html>
