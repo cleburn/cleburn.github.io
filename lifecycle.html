@@ -544,10 +544,10 @@ function zoomToStage(stageId) {
   const stageY = (r.top - ct.top) / currentScale;
   const stageW = r.width / currentScale;
   const stageH = r.height / currentScale;
-  const padX = 50, padY = 40;
+  const padX = 20, padY = 15;
   const sx = vw() / (stageW + padX * 2);
   const sy = vh() / (stageH + padY * 2);
-  const s = Math.min(sx, sy, 1.05);
+  const s = Math.min(sx, sy, 1.4);
   const cx = stageX + stageW / 2;
   const cy = stageY + stageH / 2;
   const ox = cx - (vw() / s) / 2;
