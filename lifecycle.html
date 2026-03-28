@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Lifecycle — End-to-End Governance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f0eb;
+    --card: #ffffff;
+    --border: #ddd8d0;
+    --border-accent: #c8c2b8;
+    --text: #1a1a1a;
+    --text-secondary: #5c5c5c;
+    --text-dim: #8a8580;
+    --terminal-bg: #0d1017;
+    --terminal-surface: #131720;
+    --terminal-border: #1e2433;
+    --terminal-text: #e2e8f0;
+    --terminal-dim: #5a6478;
+    --terminal-blue: #4a90e2;
+    --terminal-green: #4ade80;
+    --terminal-gold: #f0c040;
+    --terminal-red: #f87171;
+    --terminal-purple: #a78bfa;
+    --font-display: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); font-family: var(--font-display); color: var(--text); overflow: hidden; height: 100vh; }
+
+  .viewport {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .canvas {
+    width: 1600px;
+    height: 1200px;
+    position: absolute;
+    top: 0; left: 0;
+    transform-origin: 0 0;
+    transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 50px 60px;
+  }
+
+  .canvas-header {
+    text-align: center;
+    margin-bottom: 36px;
+    height: 50px;
+  }
+
+  .lifecycle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    max-width: 1480px;
+    margin: 0 auto;
+  }
+
+  .stage {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    min-height: 440px;
+  }
+
+  .stage-number {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .stage-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    letter-spacing: -0.3px;
+  }
+  .stage-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+    line-height: 1.55;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .flow-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .flow-dot.green { background: var(--terminal-green); }
+  .flow-dot.blue { background: var(--terminal-blue); }
+  .flow-dot.gold { background: var(--terminal-gold); }
+  .flow-dot.red { background: var(--terminal-red); }
+  .flow-dot.purple { background: var(--terminal-purple); }
+  .flow-dot.dim { background: var(--border-accent); }
+
+  .flow-step-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 1px;
+  }
+  .flow-step-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+  .flow-arrow {
+    text-align: center;
+    padding: 2px 0;
+    color: var(--border-accent);
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .terminal-block {
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.6;
+    color: var(--terminal-dim);
+  }
+  .terminal-block .t-blue { color: var(--terminal-blue); }
+  .terminal-block .t-green { color: var(--terminal-green); }
+  .terminal-block .t-gold { color: var(--terminal-gold); }
+  .terminal-block .t-red { color: var(--terminal-red); }
+  .terminal-block .t-purple { color: var(--terminal-purple); }
+  .terminal-block .t-text { color: var(--terminal-text); }
+
+  .override-branch {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .override-option {
+    background: var(--terminal-bg);
+    border: 1px solid var(--terminal-border);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .override-option .opt-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .override-option .opt-desc {
+    font-size: 10px;
+    color: var(--terminal-text);
+    line-height: 1.35;
+  }
+  .override-option.log .opt-label { color: var(--terminal-gold); }
+  .override-option.warn .opt-label { color: var(--terminal-blue); }
+  .override-option.block .opt-label { color: var(--terminal-red); }
+
+  .callout {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  .callout-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .check-row {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--terminal-green); margin-bottom: 3px;
+  }
+  .check-row .check-label { color: var(--terminal-text); font-size: 10px; }
+
+  .connector-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px 0;
+    grid-column: 1 / -1;
+  }
+  .connector-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg);
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+  }
+  .connector-arrow {
+    font-size: 18px;
+    color: var(--border-accent);
+  }
+
+  .bottom-note {
+    text-align: center;
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    grid-column: 1 / -1;
+  }
+
+  /* Animatable content inside stages */
+  .anim-el {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .anim-el.visible {
+    opacity: 1;
+  }
+
+  /* Overlay titles */
+  .overlay-title {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  .overlay-title.visible { opacity: 1; }
+
+  .overlay-title .overlay-bg {
+    background: rgba(26, 26, 26, 0.88);
+    padding: 32px 52px;
+    border-radius: 16px;
+  }
+  .overlay-title h2 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 600;
+    color: #f4f0eb;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+  }
+  .overlay-title .overlay-sub {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #8a8580;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .progress-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: var(--text);
+    z-index: 100;
+    transition: width 0.1s linear;
+  }
+
+  .pause-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(26,26,26,0.85);
+    color: #f4f0eb;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .pause-hint {
+    position: fixed;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    z-index: 90;
+    opacity: 0;
+    transition: opacity 0.5s, top 0.8s ease, bottom 0.8s ease, left 0.8s ease, right 0.8s ease;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="viewport" id="viewport" onclick="togglePause()">
+  <div class="canvas" id="canvas">
+
+    <div class="canvas-header"></div>
+
+    <div class="lifecycle-grid">
+
+      <!-- STAGE 1: Discovery -->
+      <div class="stage" id="stage1">
+        <div class="stage-number anim-el" data-stage="1">01 / Discovery</div>
+        <div class="stage-title anim-el" data-stage="1">Spec-guided conversation</div>
+        <div class="stage-subtitle anim-el" data-stage="1">The CLI scans your codebase, skips sensitive files until you approve, and asks sharp questions about what matters.</div>
+        <div class="flow-step anim-el" data-stage="1">
+          <div class="flow-dot dim"></div>
+          <div><div class="flow-step-label">Codebase scan</div><div class="flow-step-desc">Reads configs, docs, CI workflows, project structure. Skips .env, credentials, database files. Tells you what it chose not to read.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="1">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="1">
+          <div class="flow-dot blue"></div>
+          <div><div class="flow-step-label">Guided discovery</div><div class="flow-step-desc">Asks about principles, autonomy domains, role boundaries, coordination protocols. For regulated projects, surfaces compliance frameworks and recommends third-party testing based on scope and tech stack.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="1">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="1">
+          <div class="flow-dot green"></div>
+          <div><div class="flow-step-label">Custom policy generation</div><div class="flow-step-desc">Doesn't fit your project into a template. Builds a full governance design around your specific requirements, stack, and boundaries. Schema-validated JSON. Session transcript saved for audit.</div></div>
+        </div>
+        <div class="terminal-block anim-el" data-stage="1">
+          <span class="t-green">&#8594;</span> <span class="t-text">.agentpolicy/constitution.json</span><br>
+          <span class="t-green">&#8594;</span> <span class="t-text">.agentpolicy/governance.json</span><br>
+          <span class="t-green">&#8594;</span> <span class="t-text">.agentpolicy/roles/backend.json</span><br>
+          <span class="t-green">&#8594;</span> <span class="t-text">.agentpolicy/roles/compliance.json</span><br>
+          <span style="color:var(--terminal-dim)">...</span><br>
+          <span style="color:var(--terminal-dim)">Policy in place at</span> <span class="t-blue">.agentpolicy/</span>
+        </div>
+      </div>
+
+      <!-- STAGE 2: Handoff -->
+      <div class="stage" id="stage2">
+        <div class="stage-number anim-el" data-stage="2">02 / Handoff</div>
+        <div class="stage-title anim-el" data-stage="2">Custom mission briefing</div>
+        <div class="stage-subtitle anim-el" data-stage="2">Not just a connection prompt. A strategic briefing that eliminates user error and gives the agent full operational context.</div>
+        <div class="flow-step anim-el" data-stage="2">
+          <div class="flow-dot gold"></div>
+          <div><div class="flow-step-label">Tailored to the conversation</div><div class="flow-step-desc">The handoff prompt tells the agent which role to select, what order to build in, what compliance foundations to lay first, who owns what, and what not to touch.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="2">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="2">
+          <div class="flow-dot"></div>
+          <div><div class="flow-step-label">User copies into next session</div><div class="flow-step-desc">The prompt instructs the agent to call aegis_policy_summary before taking any action. The MCP handshake happens first. No ambiguity. No user error.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="2">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="2">
+          <div class="flow-dot purple"></div>
+          <div><div class="flow-step-label">MCP connection + role selection</div><div class="flow-step-desc">Agent calls aegis_policy_summary, receives available roles, selects the one specified in the handoff. Construction mode for builds, specialist roles for governed operations.</div></div>
+        </div>
+        <div class="terminal-block anim-el" data-stage="2">
+          <span class="t-gold">&#8212; Your Handoff Prompt &#8212;</span><br>
+          <span class="t-text">"Call aegis_policy_summary now. Select the</span> <span class="t-gold">construction</span> <span class="t-text">role. This is ClearDefense, a</span> <span class="t-blue">CMMC Level 2/ITAR/DFARS-governed</span> <span class="t-text">logistics platform. Ryan Torres is now lead developer..."</span><br><br>
+          <span class="t-gold">&#8212; For All Future Sessions &#8212;</span><br>
+          <span class="t-text">"Call aegis_policy_summary now. This is your governance contract."</span>
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div class="connector-row">
+        <div class="connector-label">discovery complete, governance active</div>
+        <span class="connector-arrow">&#8595;</span>
+        <div class="connector-label">every action now passes through the MCP</div>
+      </div>
+
+      <!-- STAGE 3: Runtime Enforcement -->
+      <div class="stage" id="stage3">
+        <div class="stage-number anim-el" data-stage="3">03 / Runtime enforcement</div>
+        <div class="stage-title anim-el" data-stage="3">Every action validated</div>
+        <div class="stage-subtitle anim-el" data-stage="3">The MCP loads policy into server memory and validates every write, delete, and execute before it happens. Zero token overhead.</div>
+        <div class="flow-step anim-el" data-stage="3">
+          <div class="flow-dot"></div>
+          <div><div class="flow-step-label">Agent calls governed tool</div><div class="flow-step-desc">aegis_write_file, aegis_delete_file, aegis_execute. The agent never loads governance files into its context.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="3">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="3">
+          <div class="flow-dot blue"></div>
+          <div><div class="flow-step-label">Validation pipeline</div><div class="flow-step-desc">Role boundary, path permissions, content pattern scan, quality gates. All in server memory.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="3">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="3">
+          <div class="flow-dot green"></div>
+          <div><div class="flow-step-label">Pass: action executed</div><div class="flow-step-desc">All checks clear. No overhead, no delay.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="3">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="3">
+          <div class="flow-dot red"></div>
+          <div><div class="flow-step-label">Fail: policy violation detected</div><div class="flow-step-desc">Three possible paths, all logged.</div></div>
+        </div>
+        <div class="override-branch anim-el" data-stage="3">
+          <div class="override-option log"><div class="opt-label">Log silently</div><div class="opt-desc">Flag and record. Action proceeds. Timestamped in overrides.jsonl.</div></div>
+          <div class="override-option warn"><div class="opt-label">Warn + confirm</div><div class="opt-desc">Present violation to human. If confirmed, action proceeds with rationale logged. If declined, hard block.</div></div>
+          <div class="override-option block"><div class="opt-label">Hard block</div><div class="opt-desc">Action refused. Immutable policies cannot be overridden. Governance must be revised through discovery.</div></div>
+        </div>
+        <div class="callout anim-el" data-stage="3">
+          <div class="callout-label">Audit trail</div>
+          Every path writes to append-only overrides.jsonl. Timestamp, policy violated, role, action, and human rationale if overridden. Immutable.
+        </div>
+      </div>
+
+      <!-- STAGE 4: Completion -->
+      <div class="stage" id="stage4">
+        <div class="stage-number anim-el" data-stage="4">04 / Completion</div>
+        <div class="stage-title anim-el" data-stage="4">Quality gates and session close</div>
+        <div class="stage-subtitle anim-el" data-stage="4">The agent calls aegis_complete_task. Aegis runs every quality gate defined in governance before closing the session.</div>
+        <div class="flow-step anim-el" data-stage="4">
+          <div class="flow-dot purple"></div>
+          <div><div class="flow-step-label">aegis_complete_task</div><div class="flow-step-desc">Agent signals the build is done. MCP triggers the full quality gate sequence.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="4">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="4">
+          <div class="flow-dot green"></div>
+          <div><div class="flow-step-label">Quality gates execute</div><div class="flow-step-desc">Build, test, lint, typecheck. All pre_commit checks from governance.json.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="4">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="4">
+          <div class="flow-dot blue"></div>
+          <div><div class="flow-step-label">Third-party validation</div><div class="flow-step-desc">Checkov, tfsec, or equivalent. Independent compliance baseline. Self-generated tests prove consistency. Third-party scanners prove compliance.</div></div>
+        </div>
+        <div class="flow-arrow anim-el" data-stage="4">&#8595;</div>
+        <div class="flow-step anim-el" data-stage="4">
+          <div class="flow-dot green"></div>
+          <div><div class="flow-step-label">Session closed</div><div class="flow-step-desc">Construction mode deactivated. Closing timestamp logged. Future sessions select specialist roles with full enforcement.</div></div>
+        </div>
+        <div class="terminal-block anim-el" data-stage="4">
+          <span class="t-purple">&#9679; aegis &#8212; aegis_complete_task (MCP)</span><br>
+          <div class="check-row"><span style="color:var(--terminal-green)">&#10003;</span> <span class="check-label">383 Python tests &#8212; all passing</span></div>
+          <div class="check-row"><span style="color:var(--terminal-green)">&#10003;</span> <span class="check-label">29 frontend tests &#8212; all passing</span></div>
+          <div class="check-row"><span style="color:var(--terminal-green)">&#10003;</span> <span class="check-label">ruff lint &#8212; clean</span></div>
+          <div class="check-row"><span style="color:var(--terminal-green)">&#10003;</span> <span class="check-label">TypeScript typecheck &#8212; clean</span></div>
+          <div class="check-row"><span style="color:var(--terminal-green)">&#10003;</span> <span class="check-label">Checkov compliance &#8212; all passing</span></div>
+          <br>
+          <span class="t-green">&#9679; Construction complete. All quality gates passed.</span>
+        </div>
+      </div>
+
+      <!-- Bottom note -->
+      <div class="bottom-note">From a 10-minute conversation to full runtime enforcement. The same .agentpolicy/ directory governs every agent, every session, every action. Append-only audit trail on everything.</div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Overlay titles -->
+<div class="overlay-title" id="openingOverlay">
+  <div class="overlay-bg">
+    <h2>How Aegis governs<br>from end to end</h2>
+    <div class="overlay-sub">Zero token overhead. Full audit trail. Every action validated before execution.</div>
+  </div>
+</div>
+
+<div class="overlay-title" id="closingOverlay">
+  <div class="overlay-bg">
+    <h2>Aegis</h2>
+    <div class="overlay-sub">Policy at the root. Enforcement at runtime.<br>Accountability on every action. Open source. Agent-agnostic.</div>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="pause-indicator" id="pauseIndicator"></div>
+<div class="pause-hint" id="pauseHint">tap to pause / resume</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const viewport = document.getElementById('viewport');
+const progressBar = document.getElementById('progressBar');
+const pauseIndicator = document.getElementById('pauseIndicator');
+const openingOverlay = document.getElementById('openingOverlay');
+const closingOverlay = document.getElementById('closingOverlay');
+
+const pauseHint = document.getElementById('pauseHint');
+
+let paused = false;
+let elapsed = 0;
+let lastTime = null;
+const TOTAL = 42000;
+
+pauseIndicator.style.opacity = '0';
+
+const vw = () => viewport.clientWidth;
+const vh = () => viewport.clientHeight;
+
+function setView(x, y, scale) {
+  canvas.style.transform = `scale(${scale}) translate(${-x}px, ${-y}px)`;
+}
+
+function setPauseHintPos(pos) {
+  pauseHint.style.top = 'auto';
+  pauseHint.style.bottom = 'auto';
+  pauseHint.style.left = 'auto';
+  pauseHint.style.right = 'auto';
+  if (pos === 'top-left') { pauseHint.style.top = '20px'; pauseHint.style.left = '20px'; }
+  else if (pos === 'top-right') { pauseHint.style.top = '20px'; pauseHint.style.right = '20px'; }
+  else if (pos === 'bottom-left') { pauseHint.style.bottom = '20px'; pauseHint.style.left = '20px'; }
+  else if (pos === 'bottom-right') { pauseHint.style.bottom = '20px'; pauseHint.style.right = '20px'; }
+  pauseHint.style.opacity = '1';
+}
+
+function fitFull() {
+  const sx = vw() / 1600;
+  const sy = vh() / 1200;
+  const s = Math.min(sx, sy) * 0.85;
+  const ox = (vw() / s - 1600) / 2;
+  const oy = (vh() / s - 1200) / 2;
+  setView(-ox, -oy + 130, s);
+}
+
+function zoomToStage(stageId) {
+  const el = document.getElementById(stageId);
+  const ct = canvas.getBoundingClientRect();
+  const currentScale = ct.width / 1600;
+  const r = el.getBoundingClientRect();
+  const stageX = (r.left - ct.left) / currentScale;
+  const stageY = (r.top - ct.top) / currentScale;
+  const stageW = r.width / currentScale;
+  const stageH = r.height / currentScale;
+  const padX = 50, padY = 40;
+  const sx = vw() / (stageW + padX * 2);
+  const sy = vh() / (stageH + padY * 2);
+  const s = Math.min(sx, sy, 1.05);
+  const cx = stageX + stageW / 2;
+  const cy = stageY + stageH / 2;
+  const ox = cx - (vw() / s) / 2;
+  const oy = cy - (vh() / s) / 2;
+  setView(ox, oy, s);
+}
+
+function showEls(stage, interval) {
+  const els = document.querySelectorAll(`[data-stage="${stage}"]`);
+  els.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * interval);
+  });
+}
+
+function hideEls(stage) {
+  document.querySelectorAll(`[data-stage="${stage}"]`).forEach(el => {
+    el.classList.remove('visible');
+  });
+}
+
+function showAllContent() {
+  for (let s = 1; s <= 4; s++) {
+    document.querySelectorAll(`[data-stage="${s}"]`).forEach(el => el.classList.add('visible'));
+  }
+}
+
+function hideAllContent() {
+  for (let s = 1; s <= 4; s++) hideEls(s);
+}
+
+// State tracking for persistent content
+const revealed = { 1: false, 2: false, 3: false, 4: false };
+
+const timeline = [
+  // Opening: full view with all content, overlay title (0-4s)
+  { t: 0, action: () => {
+    fitFull();
+    showAllContent();
+    openingOverlay.classList.add('visible');
+    closingOverlay.classList.remove('visible');
+    pauseHint.style.opacity = '0';
+    Object.keys(revealed).forEach(k => revealed[k] = false);
+  }},
+  // Zoom into stage 1 (4-12s)
+  { t: 4000, action: () => {
+    openingOverlay.classList.remove('visible');
+    hideEls(1);
+    zoomToStage('stage1');
+    setPauseHintPos('top-left');
+    setTimeout(() => { showEls(1, 500); revealed[1] = true; }, 800);
+  }},
+  // Zoom into stage 2 (12-20s)
+  { t: 12000, action: () => {
+    if (!revealed[1]) { document.querySelectorAll('[data-stage="1"]').forEach(el => el.classList.add('visible')); revealed[1] = true; }
+    hideEls(2);
+    zoomToStage('stage2');
+    setPauseHintPos('top-right');
+    setTimeout(() => { showEls(2, 500); revealed[2] = true; }, 800);
+  }},
+  // Zoom into stage 3 (20-29s)
+  { t: 20000, action: () => {
+    if (!revealed[2]) { document.querySelectorAll('[data-stage="2"]').forEach(el => el.classList.add('visible')); revealed[2] = true; }
+    hideEls(3);
+    zoomToStage('stage3');
+    setPauseHintPos('bottom-left');
+    setTimeout(() => { showEls(3, 450); revealed[3] = true; }, 800);
+  }},
+  // Zoom into stage 4 (29-37s)
+  { t: 29000, action: () => {
+    if (!revealed[3]) { document.querySelectorAll('[data-stage="3"]').forEach(el => el.classList.add('visible')); revealed[3] = true; }
+    hideEls(4);
+    zoomToStage('stage4');
+    setPauseHintPos('bottom-right');
+    setTimeout(() => { showEls(4, 450); revealed[4] = true; }, 800);
+  }},
+  // Closing: zoom out, all content stays, closing overlay (37-42s)
+  { t: 37000, action: () => {
+    if (!revealed[4]) { document.querySelectorAll('[data-stage="4"]').forEach(el => el.classList.add('visible')); revealed[4] = true; }
+    showAllContent();
+    fitFull();
+    pauseHint.style.opacity = '0';
+    setTimeout(() => closingOverlay.classList.add('visible'), 1000);
+  }},
+];
+
+let lastTriggered = -1;
+
+function tick(now) {
+  if (!lastTime) lastTime = now;
+  if (!paused) {
+    elapsed += now - lastTime;
+  }
+  lastTime = now;
+
+  if (elapsed >= TOTAL) {
+    elapsed = 0;
+    lastTriggered = -1;
+    closingOverlay.classList.remove('visible');
+    openingOverlay.classList.remove('visible');
+    pauseHint.style.opacity = '0';
+    hideAllContent();
+    Object.keys(revealed).forEach(k => revealed[k] = false);
+  }
+
+  progressBar.style.width = ((elapsed / TOTAL) * 100) + '%';
+
+  for (let i = timeline.length - 1; i >= 0; i--) {
+    if (elapsed >= timeline[i].t && i > lastTriggered) {
+      lastTriggered = i;
+      timeline[i].action();
+      break;
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+function togglePause() {
+  paused = !paused;
+  lastTime = null;
+  pauseIndicator.style.opacity = paused ? '1' : '0';
+  pauseIndicator.textContent = paused ? '\u23F8 paused \u2014 tap to resume' : '';
+}
+
+fitFull();
+showAllContent();
+requestAnimationFrame(tick);
+</script>
+
+</body>
+</html>
