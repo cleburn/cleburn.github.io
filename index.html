@@ -1475,6 +1475,97 @@
       .hero-badges { flex-direction: column; }
     }
 
+    /* ---- Problem pillars ---- */
+    .problem-pillar {
+      background: var(--bg-page-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: left;
+      transition: border-color 0.3s;
+    }
+    .problem-pillar:hover { border-color: #1a1a1a; }
+    .problem-pillar .pillar-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      font-family: var(--font-display);
+    }
+    .problem-pillar .pillar-body {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ---- Multi-Model section ---- */
+    .multi-model {
+      padding: 100px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .multi-model .screenshot-frame {
+      max-width: 900px;
+      margin: 48px auto 64px;
+      background: var(--terminal-bg);
+      border: 1px solid var(--terminal-border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    }
+    .multi-model .screenshot-frame img {
+      width: 100%;
+      display: block;
+    }
+    .multi-model-points {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      max-width: 980px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .mm-point {
+      background: var(--bg-page-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: border-color 0.3s;
+    }
+    .mm-point:hover { border-color: #1a1a1a; }
+    .mm-point h4 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .mm-point h4 code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      background: var(--bg-surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .mm-point p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .mm-point p code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--bg-surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    @media (max-width: 768px) {
+      .multi-model-points { grid-template-columns: 1fr; }
+    }
+
     /* ---- Animations ---- */
     .fade-up {
       opacity: 0;
@@ -1555,20 +1646,17 @@
       <h2 class="section-title fade-up">AI agents are writing production code<br>with zero governance.</h2>
       <p class="section-subtitle fade-up">Because the agents don't have a contract with you. They have markdown files. Markdown files are just system prompts, which are completely not enforceable. Every current workaround is written for human readers, and agents try their best to cope. But now Aegis is here, to be the translator that turns your vision for the project into a binding contract, written in the agents' language, that the agents cannot break.</p>
       <div class="problem-grid">
-        <div class="problem-stat fade-up">
-          <div class="number">6.3M</div>
-          <div class="label">Orders lost in a single outage after AI-assisted code changes at Amazon</div>
-          <div class="source">Business Insider, March 2026</div>
+        <div class="problem-pillar fade-up">
+          <div class="pillar-title">Scope drift</div>
+          <div class="pillar-body">Agents will write outside the directories you intended unless something structurally stops them. "Just this once" doesn't survive multi-session work &mdash; every exception becomes the new baseline the next agent inherits.</div>
         </div>
-        <div class="problem-stat fade-up">
-          <div class="number">13hr</div>
-          <div class="label">AWS outage after their AI tool decided to "delete and recreate the environment"</div>
-          <div class="source">Financial Times, March 2026</div>
+        <div class="problem-pillar fade-up">
+          <div class="pillar-title">Self-approval</div>
+          <div class="pillar-body">Without a structural rule, the agent that wrote the code is the agent that reviews it. Quality gates can't be built on single-agent trust loops.</div>
         </div>
-        <div class="problem-stat fade-up">
-          <div class="number">335</div>
-          <div class="label">Critical Amazon systems now under a 90-day safety reset requiring human approval</div>
-          <div class="source">CNBC, March 2026</div>
+        <div class="problem-pillar fade-up">
+          <div class="pillar-title">State collisions</div>
+          <div class="pillar-body">Multi-agent workflows lose track of who claimed what. Problems cascade unless there is a multi-agent orchestration layer that is physically non-bypassable.</div>
         </div>
       </div>
     </div>
@@ -1784,6 +1872,34 @@
         <span class="step">Enforcement at runtime</span>
         <span class="arrow">&rarr;</span>
         <span class="step">Accountability on every action</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Multi-Model -->
+  <section class="multi-model" id="multi-model">
+    <div class="container">
+      <div class="section-label fade-up">Provider Choice</div>
+      <h2 class="section-title fade-up">Five providers. Local models. One session.</h2>
+      <p class="section-subtitle fade-up">Aegis is model-agnostic by design. The same discovery conversation runs against frontier models from Anthropic, OpenAI, Google, and DeepSeek &mdash; or any local open-source model served through an OpenAI-compatible endpoint like Ollama, LM Studio, llama.cpp, or vLLM. Pick one at the start. Swap with <code style="background:var(--bg-surface);padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:14px;">/model</code> mid-session without losing the conversation.</p>
+
+      <div class="screenshot-frame fade-up">
+        <img src="assets/model-selection-local.png" alt="Aegis init showing nine model options including local open-source models, with the user selecting option 9 and gemma4:26b conducting the discovery conversation" />
+      </div>
+
+      <div class="multi-model-points">
+        <div class="mm-point fade-up">
+          <h4>Pick at session start</h4>
+          <p>First run asks which model you want. Future sessions remember the choice; <code>/model</code> changes it anytime.</p>
+        </div>
+        <div class="mm-point fade-up">
+          <h4>Swap mid-session with <code>/model</code></h4>
+          <p>Conversation history is preserved across switches. The new model reads everything the prior model produced and continues from the same state.</p>
+        </div>
+        <div class="mm-point fade-up">
+          <h4>Real workflow primitive</h4>
+          <p>Drive substantive discovery with one model, switch to another to review the playback, bring in a third for a second opinion &mdash; all inside one session.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -2260,7 +2376,7 @@
         <div class="path-card fade-up">
           <div class="audience">Decision Maker</div>
           <h3>See the results</h3>
-          <p>Browse the stress test repos. Two regulated industries, zero governance violations. Then bring it to your engineering team.</p>
+          <p>Browse the stress test repos. Three regulated industries, zero governance violations. Then bring it to your engineering team.</p>
           <a href="https://github.com/cleburn/clearfintech" class="path-link">View ClearFinTech &rarr;</a>
         </div>
       </div>
